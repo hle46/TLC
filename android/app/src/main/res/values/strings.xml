@@ -1,0 +1,14 @@
+<resources>
+    <string name="logo">logo</string>
+    <string name="app_name">TLC</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_exp_intro">Experiment Introduction</string>
+    <string name="title_activity_tlcproc">TLCProcActivity</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_pills">PillsActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+</resources>

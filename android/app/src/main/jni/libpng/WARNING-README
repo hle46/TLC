@@ -1,0 +1,5 @@
+A copy of the libPNG sources is made into the jni directory when you
+configure for Android.
+
+DO NOT CHANGE THAT COPY: IT WILL BE DELETED IF YOU CLEAN UP THE PACKAGE.
+

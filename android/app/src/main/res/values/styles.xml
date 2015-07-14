@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="MyActionBarSize">40dp</dimen>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:configChanges">keyboard|orientation|screenSize</item>
+    </style>
+
+
+</resources>

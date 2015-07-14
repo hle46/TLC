@@ -1,0 +1,4 @@
+main.o: main.cc tlc.h imtoolbox.h core/traits.h core/utility.h \
+ core/matrix.h core/image.h core/proc.h
+imtoolbox.o: imtoolbox.cc imtoolbox.h core/traits.h core/utility.h \
+ core/matrix.h core/image.h core/proc.h
