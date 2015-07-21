@@ -23,7 +23,7 @@ public class TLCApplication extends Application {
 
     /*----------------------------------------------------------------------------*/
     // If you change the following constants, remmember to change in tlc.h as well
-    public static final String AVG_FILE_NAME = "avg.png";
+    public static final String AVG_FILE_NAME = "avg.jpg";
     public static final String LOG_FILE = "log.txt";
     public static final String BG_FOLDER = "bg/";
     public static final String SAMPLE_FOLDER = "sample/";

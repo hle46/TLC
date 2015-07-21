@@ -6,8 +6,9 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 
 include $(CLEAR_VARS)
 
+LOCAL_ARM_NEON := true
 LOCAL_MODULE		:= tlc
-LOCAL_SRC_FILES	 	:= imtoolbox.cc uiuc_bioassay_tlc_TLCApplication.cc
+LOCAL_SRC_FILES	 	:= imtoolbox.cc tlc.cc uiuc_bioassay_tlc_TLCApplication.cc
 LOCAL_C_INCLUDES 	+= $(LOCAL_PATH)/libjpeg $(LOCAL_PATH)/libpng $(LOCAL_PATH)
 LOCAL_STATIC_LIBRARIES 	:= libpng libjpeg 
 LOCAL_CPP_FEATURES 	+= exceptions

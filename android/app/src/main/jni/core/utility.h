@@ -240,14 +240,18 @@ struct Rect {
       : x1(_x1), x2(_x2), y1(_y1), y2(_y2) {}
 };
 
-struct Offset {
+struct Margin {
   size_t left;
   size_t right;
   size_t top;
   size_t bottom;
-  Offset(size_t l, size_t r, size_t t, size_t b)
+  Margin(size_t l, size_t r, size_t t, size_t b)
       : left(l), right(r), top(t), bottom(b) {}
 };
+
+// Function signatures
+bool exist(const char *file_name) noexcept;
+bool exist(const std::string &file_name) noexcept;
 
 } // namespace imtoolbox
 #endif // IMTOOLBOX_ULTILITY_H

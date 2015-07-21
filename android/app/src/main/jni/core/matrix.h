@@ -260,13 +260,11 @@ inline bool same_extents(const matrix_slice<M> &a, const matrix_slice<N> &b) {
          std::equal(a.extents.begin(), a.extents.end(), b.extents.begin());
 }
 
-
 // same size
 template <size_t M, size_t N>
-  inline bool same_size(const matrix_slice<M> &a, const matrix_slice<N> &b) {
+inline bool same_size(const matrix_slice<M> &a, const matrix_slice<N> &b) {
   return a.size == b.size;
 }
-
 
 // Check if two matrixes have the same extent.
 template <typename M1, typename M2>
@@ -431,7 +429,7 @@ public:
   using iterator_category = std::forward_iterator_tag;
 
   slice_iterator(const matrix_slice<N> &s, T *base, bool end_iter = false)
-    : desc{std::cref(s)} {
+      : desc{std::cref(s)} {
     std::fill_n(indexes.begin(), N, 0);
     if (end_iter) {
       indexes[0] = s.extents[0];
@@ -492,7 +490,7 @@ private:
   T *ptr;                        // The current elements
 
   void increment() {
-    const matrix_slice<N>& iter_desc = descriptor();
+    const matrix_slice<N> &iter_desc = descriptor();
     std::size_t d = N - 1;
     while (true) {
       ptr += iter_desc.strides[d];
@@ -731,11 +729,11 @@ public:
   }
 
   // Swap
-  void swap(matrix_ref& mr) {
+  void swap(matrix_ref &mr) {
     std::swap(desc, mr.desc);
     std::swap(ptr, mr.ptr);
-  } 
-  
+  }
+
   // Swap rows
   void swap_rows(size_t m, size_t n) {
     auto r1 = (*this)[m];
@@ -907,7 +905,7 @@ public:
   size_t size(size_t n) const { return desc.extents[n]; }
 
   // Return total size
-  size_t size() const { return desc.size; }
+  size_t size() const { return elems.size(); }
 
   // "flat" element access
   T *data() { return elems.data(); }
@@ -1070,10 +1068,10 @@ public:
 
   template <size_t M, typename U, size_t P>
           friend enable_if_t < M >= 1 &&
-      M<P, matrix<U, M>> resize(matrix<U, P> &&in);
+      M<P, matrix<U, M>> resize(matrix<U, P> &in);
 
   template <size_t M, typename U, size_t P>
-  friend enable_if_t<M >= 1 && M == P, matrix<U, M>> resize(matrix<U, P> &&in);
+  friend enable_if_t<M >= 1 && M == P, matrix<U, M>> resize(matrix<U, P> &in);
 
 private:
   matrix_slice<N> desc; // slice defining extents in the N dimensions
@@ -1151,7 +1149,8 @@ operator==(const M1 &a, const M2 &b) {
     return true;
   }
   assert(same_extents(a, b));
-  return std::equal(a.begin(), a.end(), b.begin(), [](auto x, auto y) { return almost_equal(x, y); });
+  return std::equal(a.begin(), a.end(), b.begin(),
+                    [](auto x, auto y) { return almost_equal(x, y); });
 }
 
 template <typename M1, typename M2>
