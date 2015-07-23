@@ -87,8 +87,8 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
   // Load sample image
   auto sample_file = path + SAMPLE_FOLDER + AVG_FILE_NAME;
   matrix3<uint8_t> im =
-    avg_folder_neon<MAX_PICTURE>(path + SAMPLE_FOLDER, AVG_FILE_NAME,
-                      Margin{left_off, right_off, top_off, bottom_off});
+      avg_folder<MAX_PICTURE>(path + SAMPLE_FOLDER, AVG_FILE_NAME,
+                              Margin{left_off, right_off, top_off, bottom_off});
   if (is_empty(im)) {
     println_e("Couldn't load sample image");
     return spots;
@@ -107,7 +107,7 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
 
   // Load the background image
   auto bg_file = path + BG_FOLDER + AVG_FILE_NAME;
-  matrix3<uint8_t> bg = avg_folder_neon<MAX_PICTURE>(
+  matrix3<uint8_t> bg = avg_folder<MAX_PICTURE>(
       path + BG_FOLDER, AVG_FILE_NAME,
       Margin{left_off + front + from_front_off,
              right_off + y_im.size(1) - 1 - origin + from_origin_off, top_off,
@@ -135,6 +135,8 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
 
   std::vector<Rect> rects;
   auto labels = bwlabel(mask, rects);
+
+  println_i(sum_all(mask));
 
   for (size_t i = 0; i < rects.size(); ++i) {
     if (is_invalid_spot(rects[i], f.size(1), f.size(0))) {
@@ -171,6 +173,7 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
              [](auto x) { return std::min(255 * x, static_cast<fp_t>(255)); });
 
   thresh = pctl_hist_thresh(h, 0.5) / 255;
+  println_i(thresh);
 
   for (size_t i = 0; i < spots.size(); ++i) {
     spots[i].rf = 1 - (spots[i].xc + from_front_off) / (origin - front + 1);

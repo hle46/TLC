@@ -7,14 +7,14 @@
 #endif
 namespace imtoolbox {
 
-template <size_t N = 3>
+template <size_t num_images, size_t N = 3>
 matrix<uint8_t, N> avg_folder(const char *path_name, const char *avg_file_name,
-                              size_t num_images,
                               const Margin &margin) noexcept {
   static_assert(N == 2 || N == 3, "N == 2 || N == 3");
-  if (num_images < 1 || num_images > 256) {
-    return matrix<uint8_t, N>{};
-  }
+  static_assert(num_images >= 1 && num_images <= 256,
+                "num_images >= 1 && num_images <= 256");
+  static_assert((num_images & (num_images - 1)) == 0,
+                "number of images should be a power of 2");
   std::string path{path_name};
   if (path[path.length() - 1] != '/') {
     path += "/";
@@ -40,185 +40,17 @@ matrix<uint8_t, N> avg_folder(const char *path_name, const char *avg_file_name,
     pix[i] = images[i].data() + offset_from_start;
   }
 
-  uint16_t s = 0;
-  uint8_t pad = num_images / 2;
   size_t next_row_offset = (margin.left + margin.right) * depth;
   auto ret = matrix<uint8_t, 3>(row_stop - row_start + 1,
                                 col_stop - col_start + 1, depth);
-  size_t n = (col_stop - col_start + 1) * depth;
   uint8_t *pix_ret = ret.data();
-  for (size_t k = row_start; k <= row_stop; ++k) {
-    for (size_t i = 0; i < n; ++i) {
-      s = 0;
-      for (size_t j = 0; j < num_images; ++j) {
-        s += *(pix[j]++);
-      }
-      *pix_ret++ = (s + pad) / num_images;
-    }
-    for (size_t j = 0; j < num_images; ++j) {
-      pix[j] += next_row_offset;
-    }
-  }
-  // ret = resize<N>(ret);
-  imwrite(ret, path + avg_file_name);
-  return ret;
-}
-
-// Template functions
-template <size_t N = 3>
-matrix<uint8_t, N> avg_folder(const char *path_name, const char *avg_file_name,
-                              size_t num_images) noexcept {
-  if (num_images < 1 || num_images > 256) {
-    return matrix<uint8_t, N>{};
-  }
-  std::string path{path_name};
-  if (path[path.length() - 1] != '/') {
-    path += "/";
-  }
-  std::vector<matrix<uint8_t, N>> images(num_images);
-  for (size_t i = 0; i < images.size(); ++i) {
-    images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
-  }
-  // TODO: Check if all images have the same size
-  std::vector<decltype(images[0].begin())> pix(num_images);
-  for (size_t i = 0; i < num_images; ++i) {
-    pix[i] = images[i].begin();
-  }
-
-  uint16_t s = 0;
-  uint8_t pad = num_images / 2;
-  for (auto first = images[num_images - 1].begin(),
-            last = images[num_images - 1].end();
-       first != last; ++first) {
-    s = 0;
-    for (size_t k = 0; k < num_images; ++k) {
-      s += *(pix[k]);
-      ++(pix[k]);
-    }
-    *first = (s + pad) / num_images;
-  }
-  imwrite(images[num_images - 1], path + avg_file_name);
-  return std::move(images[num_images - 1]);
-}
-
-template <size_t N = 3>
-inline matrix<uint8_t, N> avg_folder(const std::string &path_name,
-                                     const char *avg_file_name,
-                                     size_t num_images) noexcept {
-  return avg_folder<N>(path_name.c_str(), avg_file_name, num_images);
-}
-
-template <size_t N = 3>
-inline matrix<uint8_t, N>
-avg_folder(const std::string &path_name, const char *avg_file_name,
-           size_t num_images, const Margin &margin) noexcept {
-  return avg_folder<N>(path_name.c_str(), avg_file_name, num_images, margin);
-}
-
+  size_t n = (col_stop - col_start + 1) * depth;
 #ifdef ANDROID
-constexpr int get_exponent(size_t n) {
-  int exponent = 0;
-  while ((n >>= 1) != 0) {
-    ++exponent;
-  }
-  return exponent;
-}
-// Template functions
-template <size_t num_images, size_t N = 3>
-matrix<uint8_t, N> avg_folder_neon(const char *path_name,
-                                   const char *avg_file_name) noexcept {
-  if (num_images < 1 || (num_images & (num_images - 1)) != 0) {
-    println_e("No image or number of images is not a power of 2");
-    return matrix<uint8_t, N>{};
-  }
-  std::string path{path_name};
-  if (path[path.length() - 1] != '/') {
-    path += "/";
-  }
-  std::vector<matrix<uint8_t, N>> images(num_images);
-  for (size_t i = 0; i < images.size(); ++i) {
-    images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
-  }
-  // TODO: Check if all images have the same size
-  std::vector<uint8_t *> pix(num_images);
-  for (size_t i = 0; i < num_images; ++i) {
-    pix[i] = images[i].data();
-  }
-
-  size_t n = images[0].size();
-  const int exponent = get_exponent(num_images);
+  constexpr int exponent = get_exponent(num_images);
   uint16x8_t temp;
   uint8x8_t pad = vdup_n_u8(num_images / 2);
-  for (size_t i = 0; i < n / 8; ++i) {
-    temp = vdupq_n_u16(0);
-    uint8x8_t pix_val;
-    for (size_t j = 0; j < num_images; ++j) {
-      pix_val = vld1_u8(pix[j]);
-      temp = vaddw_u8(temp, pix_val);
-    }
-    temp = vaddw_u8(temp, pad);
-    vst1_u8(pix[num_images - 1], vqmovn_u16(vshrq_n_u16(temp, exponent)));
-    for (size_t j = 0; j < num_images; ++j) {
-      pix[j] += 8;
-    }
-  }
-  size_t remain = n % 8;
-  while (remain > 0) {
-    uint16_t s = 0;
-    for (size_t j = 0; j < num_images - 1; ++j) {
-      s += *(pix[j]);
-      ++(pix[j]);
-    }
-    *(pix[num_images - 1]) =
-        (s + *(pix[num_images - 1]) + num_images / 2) >> exponent;
-    --remain;
-  }
-  imwrite(images[num_images - 1], path + avg_file_name);
-  return std::move(images[num_images - 1]);
-}
-
-template <size_t num_images, size_t N = 3>
-matrix<uint8_t, N> avg_folder_neon(const char *path_name,
-                                   const char *avg_file_name,
-                                   const Margin &margin) noexcept {
-  static_assert(num_images >= 1 || (num_images & (num_images - 1)) == 0, "");
-  // TODO: Check validity of offset
-  std::string path{path_name};
-  if (path[path.length() - 1] != '/') {
-    path += "/";
-  }
-  std::vector<matrix<uint8_t, N>> images(num_images);
-  for (size_t i = 0; i < images.size(); ++i) {
-    images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
-  }
-  // TODO: Check if all images have the same size
-  size_t row_start = margin.top;
-  size_t row_stop = images[0].size(0) - 1 - margin.bottom;
-  size_t col_start = margin.left;
-  size_t col_stop = images[1].size(1) - 1 - margin.right;
-
-  size_t depth = (N == 3) ? images[0].size(2) : 1;
-
-  size_t row_stride = images[0].size(1) * depth;
-  std::vector<uint8_t *> pix(num_images);
-  // LOGD("Offset: %d", row_start * row_stride + row_offset);
-  size_t offset_from_start = row_start * row_stride + col_start * depth;
-  for (size_t i = 0; i < num_images; ++i) {
-    pix[i] = images[i].data() + offset_from_start;
-  }
-
-  const int exponent = get_exponent(num_images);
-  // LOGD("Exponent: %d", exponent);
-  matrix<uint8_t, N> ret = matrix<uint8_t, 3>(row_stop - row_start + 1,
-                                              col_stop - col_start + 1, depth);
-  size_t n = (col_stop - col_start + 1) * depth;
-  size_t next_row_offset = (margin.left + margin.right) * depth;
-  uint16x8_t temp;
-  uint8x8_t pad = vdup_n_u8(num_images / 2);
-  uint8_t *pix_ret = ret.data();
   size_t remain = n % 8;
   for (size_t k = row_start; k <= row_stop; ++k) {
-    // LOGD("k: %d", k);
     for (size_t i = 0; i < n / 8; ++i) {
       temp = vdupq_n_u16(0);
       uint8x8_t pix_val;
@@ -231,8 +63,6 @@ matrix<uint8_t, N> avg_folder_neon(const char *path_name,
       vst1_u8(pix_ret, vqmovn_u16(vshrq_n_u16(temp, exponent)));
       pix_ret += 8;
     }
-    // LOGD("Get here");
-    // LOGD("remain: %d", remain);
     if (remain > 0) {
       // Overlap
       for (size_t j = 0; j < num_images; ++j) {
@@ -254,19 +84,114 @@ matrix<uint8_t, N> avg_folder_neon(const char *path_name,
       pix[j] += next_row_offset;
     }
   }
+#else
+  uint16_t s = 0;
+  uint8_t pad = num_images / 2;
+  for (size_t k = row_start; k <= row_stop; ++k) {
+    for (size_t i = 0; i < n; ++i) {
+      s = 0;
+      for (size_t j = 0; j < num_images; ++j) {
+        s += *(pix[j]++);
+      }
+      *pix_ret++ = (s + pad) / num_images;
+    }
+    for (size_t j = 0; j < num_images; ++j) {
+      pix[j] += next_row_offset;
+    }
+  }
+#endif // ANDROID
   ret = resize<N>(ret);
   imwrite(ret, path + avg_file_name);
   return ret;
 }
 
+// Template functions
 template <size_t num_images, size_t N = 3>
-inline matrix<uint8_t, N> avg_folder_neon(const std::string &path_name,
-                                          const char *avg_file_name,
-                                          const Margin &margin) noexcept {
-  return avg_folder_neon<num_images, N>(path_name.c_str(), avg_file_name,
-                                        margin);
+matrix<uint8_t, N> avg_folder(const char *path_name,
+                              const char *avg_file_name) noexcept {
+  static_assert(N == 2 || N == 3, "N == 2 || N == 3");
+  static_assert(num_images >= 1 && num_images <= 256,
+                "num_images >= 1 && num_images <= 256");
+  static_assert((num_images & (num_images - 1)) == 0,
+                "number of images should be a power of 2");
+  std::string path{path_name};
+  if (path[path.length() - 1] != '/') {
+    path += "/";
+  }
+  std::vector<matrix<uint8_t, N>> images(num_images);
+  for (size_t i = 0; i < images.size(); ++i) {
+    images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
+  }
+  // TODO: Check if all images have the same size
+  std::vector<decltype(images[0].begin())> pix(num_images);
+  for (size_t i = 0; i < num_images; ++i) {
+    pix[i] = images[i].begin();
+  }
+
+#ifdef ANDROID
+  size_t n = images[0].size();
+  constexpr int exponent = get_exponent(num_images);
+  uint16x8_t temp;
+  uint8x8_t pad = vdup_n_u8(num_images / 2);
+  for (size_t i = 0; i < n / 8; ++i) {
+    temp = vdupq_n_u16(0);
+    uint8x8_t pix_val;
+    for (size_t j = 0; j < num_images; ++j) {
+      pix_val = vld1_u8(pix[j]);
+      temp = vaddw_u8(temp, pix_val);
+    }
+    temp = vaddw_u8(temp, pad);
+    vst1_u8(pix[num_images - 1], vqmovn_u16(vshrq_n_u16(temp, exponent)));
+    for (size_t j = 0; j < num_images; ++j) {
+      pix[j] += 8;
+    }
+  }
+  size_t remain = n % 8;
+  if (remain > 0) {
+    // Overlap
+    for (size_t j = 0; j < num_images; ++j) {
+      pix[j] -= (8 - remain);
+    }
+    temp = vdupq_n_u16(0);
+    uint8x8_t pix_val;
+    for (size_t j = 0; j < num_images; ++j) {
+      pix_val = vld1_u8(pix[j]);
+      temp = vaddw_u8(temp, pix_val);
+    }
+    temp = vaddw_u8(temp, pad);
+    vst1_u8(pix[num_images - 1], vqmovn_u16(vshrq_n_u16(temp, exponent)));
+  }
+#else
+  uint16_t s = 0;
+  uint8_t pad = num_images / 2;
+  for (auto first = images[num_images - 1].begin(),
+            last = images[num_images - 1].end();
+       first != last; ++first) {
+    s = 0;
+    for (size_t k = 0; k < num_images; ++k) {
+      s += *(pix[k]);
+      ++(pix[k]);
+    }
+    *first = (s + pad) / num_images;
+  }
+#endif // ANDROID
+  imwrite(images[num_images - 1], path + avg_file_name);
+  return std::move(images[num_images - 1]);
 }
-#endif
+
+template <size_t num_images, size_t N = 3>
+inline matrix<uint8_t, N> avg_folder(const std::string &path_name,
+                                     const char *avg_file_name) noexcept {
+  return avg_folder<num_images, N>(path_name.c_str(), avg_file_name,
+                                   num_images);
+}
+
+template <size_t num_images, size_t N = 3>
+inline matrix<uint8_t, N> avg_folder(const std::string &path_name,
+                                     const char *avg_file_name,
+                                     const Margin &margin) noexcept {
+  return avg_folder<num_images, N>(path_name.c_str(), avg_file_name, margin);
+}
 
 // Sum along a dimension
 template <typename U = fp_t, typename M>

@@ -5,6 +5,16 @@
 #include <fstream>
 #include <cassert>
 
+#ifdef ANDROID
+#include <android/log.h>
+#define LOGI(...)                                                              \
+  __android_log_print(ANDROID_LOG_INFO, "BIOASSAY NATIVE", __VA_ARGS__)
+#define LOGD(...)                                                              \
+  __android_log_print(ANDROID_LOG_DEBUG, "BIOASSAY NATIVE", __VA_ARGS__)
+#define LOGE(...)                                                              \
+  __android_log_print(ANDROID_LOG_ERROR, "BIOASSAY NATIVE", __VA_ARGS__)
+#endif
+
 namespace imtoolbox {
 
 #ifdef DEBUG
@@ -66,7 +76,7 @@ template <typename... Args> inline void println_w(const Args &... args) {
 
 #else
 
-// TODO: Write to log file in release mode
+// Write to log file in release mode
 extern std::ofstream log;
 
 inline void begin_log(const char *file_name) {
@@ -249,9 +259,16 @@ struct Margin {
       : left(l), right(r), top(t), bottom(b) {}
 };
 
+constexpr int get_exponent(size_t n) {
+  int exponent = 0;
+  while ((n >>= 1) != 0) {
+    ++exponent;
+  }
+  return exponent;
+}
+
 // Function signatures
 bool exist(const char *file_name) noexcept;
 bool exist(const std::string &file_name) noexcept;
-
 } // namespace imtoolbox
 #endif // IMTOOLBOX_ULTILITY_H
