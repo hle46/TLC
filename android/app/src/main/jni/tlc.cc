@@ -38,6 +38,35 @@ inline bool is_invalid_spot(const Rect &rect, size_t width,
 }
 
 template <typename ForwardIterator1, typename ForwardIterator2,
+          typename ForwardIterator3>
+inline std::vector<fp_t>
+extract_normalized_spot_data(ForwardIterator1 spot_first,
+                             ForwardIterator1 spot_last, ForwardIterator2 bg,
+                             ForwardIterator3 mask,
+                             std::vector<fp_t> &dest) noexcept {
+  std::vector<fp_t> ret;
+  while (spot_first != spot_last) {
+    auto r = *spot_first;
+    auto g = *++spot_first;
+    auto b = *++spot_first;
+    auto bg_r = *bg;
+    auto bg_g = *++bg;
+    auto bg_b = *++bg;
+    if (*mask == 1) {
+      fp_t denom = bg_r * bg_r + bg_g * bg_g + bg_b * bg_b;
+
+      fp_t f = (bg_r * r + bg_g * g + bg_b * b) / denom;
+      ret.push_back(f);
+      dest.push_back(f);
+    }
+    ++spot_first;
+    ++bg;
+    ++mask;
+  }
+  return ret;
+}
+
+template <typename ForwardIterator1, typename ForwardIterator2,
           typename OutputIt>
 inline void normalize(ForwardIterator1 first1, ForwardIterator1 last1,
                       ForwardIterator2 first2, OutputIt d_first) noexcept {
@@ -56,30 +85,28 @@ inline void normalize(ForwardIterator1 first1, ForwardIterator1 last1,
   }
 }
 
-template <typename T, typename ForwardIterator1, typename ForwardIterator2>
-void extract_spot_data(ForwardIterator1 first1, ForwardIterator1 last1,
-                       ForwardIterator2 first2, std::vector<T> &dest) noexcept {
-  while (first1 != last1) {
-    if (*first2 == 1) {
-      dest.push_back(*first1);
-    }
-    ++first1;
-    ++first2;
-  }
-}
-
-template <typename ForwardIterator1, typename ForwardIterator2>
-size_t count_dark_pixels(ForwardIterator1 first1, ForwardIterator1 last1,
-                         ForwardIterator2 first2, fp_t thresh) noexcept {
+template <typename ForwardIterator>
+size_t count_dark_pixels(ForwardIterator first1, ForwardIterator last1,
+                         fp_t thresh) noexcept {
   size_t ret = 0;
   while (first1 != last1) {
-    if (*first2 == 1 && *first1 <= thresh) {
+    if (*first1 <= thresh) {
       ++ret;
     }
     ++first1;
-    ++first2;
   }
   return ret;
+}
+
+template <typename ForwardIterator>
+decltype(auto) accumulate(ForwardIterator first, size_t n) {
+  auto s = *first;
+  ++first;
+  for (size_t i = 1; i < n; ++i) {
+    s += *first;
+    ++first;
+  }
+  return s;
 }
 
 std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
@@ -160,13 +187,9 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
     auto spot = im(slice{y1, y2}, slice{x1, x2}, slice::all);
     auto bg_spot = bg(slice{y1, y2}, slice{spots[i].rect.x1, spots[i].rect.x2},
                       slice::all);
-    spots[i].data = matrix2<fp_t>(spot.size(0), spot.size(1));
-    normalize(bg_spot.begin(), bg_spot.end(), spot.begin(),
-              spots[i].data.begin());
     auto mask_spot = mask(slice{spots[i].rect.y1, spots[i].rect.y2},
                           slice{spots[i].rect.x1, spots[i].rect.x2});
-    extract_spot_data(spots[i].data.begin(), spots[i].data.end(),
-                      mask_spot.begin(), spots_data);
+    spots[i].data = extract_normalized_spot_data(spot.begin(), spot.end(), bg_spot.begin(), mask_spot.begin(), spots_data);
   }
 
   h = imhist(spots_data.begin(), spots_data.end(), 256,
@@ -175,17 +198,29 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
   thresh = pctl_hist_thresh(h, 0.5) / 255;
   println_i(thresh);
 
+  size_t num_pixels = max_allowable_pixels;
   for (size_t i = 0; i < spots.size(); ++i) {
     spots[i].rf = 1 - (spots[i].xc + from_front_off) / (origin - front + 1);
     auto mask_spot = mask(slice{spots[i].rect.y1, spots[i].rect.y2},
                           slice{spots[i].rect.x1, spots[i].rect.x2});
-    spots[i].darkness = count_dark_pixels(
-        spots[i].data.begin(), spots[i].data.end(), mask_spot.begin(), thresh);
+    size_t num_dark_pixels =
+        count_dark_pixels(spots[i].data.begin(), spots[i].data.end(), thresh);
+    spots[i].darkness = num_dark_pixels;
+    num_pixels =
+        std::min(num_pixels, static_cast<size_t>(0.8 * num_dark_pixels));
+  }
+  println_i(num_pixels);
+
+ 
+  for (size_t i = 0; i < spots.size(); ++i) {
+    sort(spots[i].data.begin(), spots[i].data.end());
+    spots[i].darkness = accumulate(spots[i].data.begin(), num_pixels);
   }
 
   // Sort spots in the order of descending yc
   std::sort(spots.begin(), spots.end(),
             [](auto &a, auto &b) { return a.yc > b.yc; });
+
   return spots;
 }
 } // namespace tlc

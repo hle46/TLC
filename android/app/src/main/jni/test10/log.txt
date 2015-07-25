@@ -29,3 +29,82 @@ Location: unknown**INFO**: 17041
 **INFO**: Spot 3: 
 **INFO**: 	Rf: 0.631700
 **INFO**: 	Darkness: 3324.000000
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 4269.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 1032.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 3324.000000
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: xxx
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 4269.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 1032.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 3324.000000
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 4269.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 1032.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 3324.000000
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 4269.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 1032.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 3324.000000
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 266.807180
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 311.183515
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 283.757882
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 266.807180
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 311.183515
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 283.757882
+**INFO**: 17041
+**INFO**: 0.811765
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635896
+**INFO**: 	Darkness: 266.807180
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637431
+**INFO**: 	Darkness: 311.183515
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631700
+**INFO**: 	Darkness: 283.757882

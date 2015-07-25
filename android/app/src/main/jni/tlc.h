@@ -10,6 +10,7 @@ constexpr size_t top_off = 350;
 constexpr size_t bottom_off = 400;
 constexpr size_t from_front_off = 100;
 constexpr size_t from_origin_off = 100;
+constexpr size_t max_allowable_pixels = 400;
 
 constexpr const char *SAMPLE_FOLDER = "sample/";
 constexpr const char *BG_FOLDER = "bg/";
@@ -23,7 +24,7 @@ template <typename T> struct Spot {
   T rf;
   T darkness;
   Rect rect;
-  matrix2<T> data;
+  std::vector<T> data;
   Spot(T _xc, T _yc, Rect _rect)
       : xc(_xc), yc(_yc), rf(0), darkness(0), rect(_rect) {}
 };
