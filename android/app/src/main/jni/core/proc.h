@@ -24,14 +24,34 @@ matrix<uint8_t, N> avg_folder(const char *path_name, const char *avg_file_name,
   for (size_t i = 0; i < num_images; ++i) {
     images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
   }
-  // TODO: check if all images have the same size
+  matrix<uint8_t, N> empty_mat{};
+  if (images[0].size() == 0) {
+    return empty_mat;
+  }
+  for (size_t i = 1; i < num_images; ++i) {
+    for (size_t j = 0; j < N; ++j) {
+      if (images[i].size(j) != images[0].size(j)) {
+        return empty_mat;
+      }
+    }
+  }
+
   size_t height = images[0].size(0);
   size_t width = images[0].size(1);
   size_t depth = (N == 3) ? images[0].size(2) : 1;
+
+  if (margin.top >= height || margin.bottom >= height || margin.left >= width ||
+      margin.right >= width) {
+    return empty_mat;
+  }
   size_t row_start = margin.top;
   size_t row_stop = height - 1 - margin.bottom;
   size_t col_start = margin.left;
   size_t col_stop = width - 1 - margin.right;
+  if (row_start > row_stop || col_start > col_stop) {
+    return empty_mat;
+  }
+
   size_t row_stride = width * depth;
 
   size_t offset_from_start = row_start * row_stride + col_start * depth;
@@ -122,10 +142,22 @@ matrix<uint8_t, N> avg_folder(const char *path_name,
   for (size_t i = 0; i < images.size(); ++i) {
     images[i] = imread<uint8_t, N>(path + std::to_string(i + 1) + ".jpg");
   }
-  // TODO: Check if all images have the same size
-  std::vector<decltype(images[0].begin())> pix(num_images);
+
+  matrix<uint8_t, N> empty_mat{};
+  if (images[0].size() == 0) {
+    return empty_mat;
+  }
+  for (size_t i = 1; i < num_images; ++i) {
+    for (size_t j = 0; j < N; ++j) {
+      if (images[i].size(j) != images[0].size(j)) {
+        return empty_mat;
+      }
+    }
+  }
+
+  std::vector<uint8_t *> pix(num_images);
   for (size_t i = 0; i < num_images; ++i) {
-    pix[i] = images[i].begin();
+    pix[i] = images[i].data();
   }
 
 #ifdef ANDROID
@@ -628,6 +660,33 @@ decltype(auto) rgb2y(const M &m) noexcept {
     *p += 65.481 * (*first / 255.);
     *p += 128.553 * (*++first / 255.);
     *p += 24.966 * (*++first / 255.) + 16;
+    ++p;
+  }
+  return ret;
+}
+
+template <typename T = fp_t, typename M>
+decltype(auto) rgb2gray(const M &m) noexcept {
+  static_assert(is_matrix<M>() && M::order == 3 && is_floating_point<T>(),
+                "Operation requires matrix of order 3 and floating point type");
+  assert(m.size(2) == 3);
+  using value_t = common_type_t<T, typename M::value_type>;
+  matrix2<value_t> ret(m.size(0), m.size(1));
+  matrix2<value_t> t = {
+      {1.0, 0.956, 0.621}, {1.0, -0.272, -0.647}, {1.0, -1.106, 1.703}};
+  auto det = t(0, 0) * (t(1, 1) * t(2, 2) - t(2, 1) * t(1, 2)) +
+             t(0, 1) * (t(1, 2) * t(2, 0) - t(2, 2) * t(1, 0)) +
+             t(0, 2) * (t(1, 0) * t(2, 1) - t(2, 0) * t(1, 1));
+  value_t coef[3] = {(t(1, 1) * t(2, 2) - t(2, 1) * t(1, 2)) / det,
+                     (t(0, 2) * t(2, 1) - t(2, 2) * t(0, 1)) / det,
+                     (t(0, 1) * t(1, 2) - t(1, 1) * t(0, 2)) / det};
+  auto p = ret.begin();
+  for (auto first = m.begin(), last = m.end(); first != last; ++first) {
+    *p += coef[0] * (*first / 255.);
+    *p += coef[1] * (*++first / 255.);
+    *p += coef[2] * (*++first / 255.);
+    *p = std::min(std::max(*p, static_cast<value_t>(0)),
+                  static_cast<value_t>(1));
     ++p;
   }
   return ret;

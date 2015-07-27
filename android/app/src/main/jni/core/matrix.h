@@ -374,7 +374,7 @@ template <size_t N> struct matrix_slice {
   template <typename T, typename... Args>
   size_t do_slice(matrix_slice<N> &out, const T &s,
                   const Args &... args) const {
-    constexpr std::size_t D = N - sizeof...(Args)-1;
+    constexpr std::size_t D = N - sizeof...(Args) - 1;
     std::size_t m = do_slice_dim<D>(out, s);
     std::size_t n = do_slice(out, args...);
     return m + n; // accumulate to get the right start
@@ -384,7 +384,7 @@ template <size_t N> struct matrix_slice {
   enable_if_t<requesting_slice<Args...>(), matrix_slice<N>>
   operator()(const Args &... args) const {
     matrix_slice<N> d;
-    d.start = do_slice(d, args...);
+    d.start = start + do_slice(d, args...);
     d.size = std::accumulate(d.extents.begin(), d.extents.end(), 1,
                              std::multiplies<size_t>());
     return d;
@@ -1219,6 +1219,34 @@ operator<(const M &m, const T &x) {
   auto p = ret.begin();
   for (auto first = m.begin(), last = m.end(); first != last; ++first) {
     *p = (*first < x) ? 1 : 0;
+    ++p;
+  }
+  return ret;
+}
+
+// Scalar threshold
+template <typename M, typename T>
+inline enable_if_t<is_matrix<M>(), matrix<logical, M::order>>
+operator>=(const M &m, const T &x) {
+  // using value_t = common_type_t<typename M::value_type, T>;
+  matrix<logical, M::order> ret(m.descriptor());
+  auto p = ret.begin();
+  for (auto first = m.begin(), last = m.end(); first != last; ++first) {
+    *p = (*first >= x) ? 1 : 0;
+    ++p;
+  }
+  return ret;
+}
+
+// Scalar threshold
+template <typename M, typename T>
+inline enable_if_t<is_matrix<M>(), matrix<logical, M::order>>
+operator>(const M &m, const T &x) {
+  // using value_t = common_type_t<typename M::value_type, T>;
+  matrix<logical, M::order> ret(m.descriptor());
+  auto p = ret.begin();
+  for (auto first = m.begin(), last = m.end(); first != last; ++first) {
+    *p = (*first > x) ? 1 : 0;
     ++p;
   }
   return ret;

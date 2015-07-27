@@ -191,7 +191,7 @@ template <typename ForwardIterator>
 std::pair<ForwardIterator, ForwardIterator>
 minmax_element(ForwardIterator first, ForwardIterator last) {
   if (first == last) {
-    return std::make_pair(first, last);
+    return std::make_pair(first, first);
   }
 
   auto largest = first;
@@ -208,6 +208,28 @@ minmax_element(ForwardIterator first, ForwardIterator last) {
 }
 
 // max_element
+// Finds the greatest element in the range [first, last)
+template <typename ForwardIterator>
+std::pair<ForwardIterator, size_t> max_element(ForwardIterator first,
+                                               ForwardIterator last) {
+  if (first == last) {
+    return std::make_pair(first, -1);
+  }
+  size_t idx = 0;
+  auto max_idx = idx;
+  ForwardIterator next = first;
+  while (++next != last) {
+    ++idx;
+    if (*first < *next) {
+      first = next;
+      max_idx = idx;
+    }
+  }
+
+  return std::make_pair(first, max_idx);
+}
+
+// max_element
 // Finds the greatest element in the range [first, last), ignoring elements
 // which do not satisfy the predicate f
 template <typename ForwardIterator, typename F>
@@ -219,7 +241,7 @@ std::pair<ForwardIterator, size_t> max_element(ForwardIterator first,
     ++idx;
   }
   if (first == last) {
-    return std::make_pair(first, idx);
+    return std::make_pair(first, -1);
   }
 
   auto max_idx = idx;
