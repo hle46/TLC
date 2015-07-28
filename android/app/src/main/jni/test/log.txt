@@ -41,3 +41,33 @@ Location:
 **INFO**: Spot 3: 
 **INFO**: 	Rf: 0.494960
 **INFO**: 	Darkness: 217.001910
+**INFO**: 40860
+**INFO**: 0.866667
+**INFO**: 6761
+**INFO**: 5010
+**INFO**: 8588
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.493331
+**INFO**: 	Darkness: 197.769967
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.498431
+**INFO**: 	Darkness: 228.737979
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.494960
+**INFO**: 	Darkness: 217.001910
+**INFO**: 40860
+**INFO**: 0.866667
+**INFO**: 6761
+**INFO**: 5010
+**INFO**: 8588
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.493331
+**INFO**: 	Darkness: 197.769967
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.498431
+**INFO**: 	Darkness: 228.737979
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.494960
+**INFO**: 	Darkness: 217.001910
