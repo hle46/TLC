@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -80,6 +81,8 @@ public class TLCProcWorker extends AsyncTask<String, Void, double[]> {
         TableRow tr1 = new TableRow(activity);
         for (int j = 0; j < spots.length / 2; ++j) {
             TextView textView = new TextView(activity);
+            textView.setTextColor(activity.getResources().getColor(R.color.black));
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setWidth(90);
             textView.setTextSize(18);
             textView.setText("Rf: " + round(spots[2 * j], 2));
@@ -90,19 +93,14 @@ public class TLCProcWorker extends AsyncTask<String, Void, double[]> {
         TableRow tr2 = new TableRow(activity);
         for (int j = 0; j < spots.length / 2; ++j) {
             TextView textView = new TextView(activity);
+            textView.setTextColor(activity.getResources().getColor(R.color.black));
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setWidth(90);
             textView.setTextSize(18);
-            textView.setText("D: " + (int)(spots[2 * j + 1]));
+            textView.setText("D: " + round(spots[2 * j + 1], 3));
             tr2.addView(textView);
         }
         tableLayout.addView(tr2);
-        /*
-        TextView textView1 = (TextView) activity.findViewById(R.id.textView1);
-        textView1.setText("Rf: " + round(spots[0], 2) + "\n" + "D: " + spots[1]);
-        TextView textView2 = (TextView) activity.findViewById(R.id.textView2);
-        textView2.setText("Rf: " + round(spots[2], 2) + "\n" + "D: " + spots[3]);
-        TextView textView3 = (TextView) activity.findViewById(R.id.textView3);
-        textView3.setText("Rf: " + round(spots[4], 2) + "\n" + "D: " + spots[5]);*/
     }
 
     private static Bitmap decodeIMG(String img) {

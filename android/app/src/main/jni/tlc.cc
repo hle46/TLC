@@ -99,10 +99,13 @@ size_t count_dark_pixels(ForwardIterator first1, ForwardIterator last1,
 }
 
 template <typename ForwardIterator>
-decltype(auto) accumulate(ForwardIterator first, size_t n) {
+decltype(auto) accumulate(ForwardIterator first, size_t from, size_t to) {
+  for (size_t i = 0; i < from; ++i) {
+    ++first;
+  }
   auto s = *first;
   ++first;
-  for (size_t i = 1; i < n; ++i) {
+  for (size_t i = from + 1; i < to; ++i) {
     s += *first;
     ++first;
   }
@@ -189,7 +192,9 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
                       slice::all);
     auto mask_spot = mask(slice{spots[i].rect.y1, spots[i].rect.y2},
                           slice{spots[i].rect.x1, spots[i].rect.x2});
-    spots[i].data = extract_normalized_spot_data(spot.begin(), spot.end(), bg_spot.begin(), mask_spot.begin(), spots_data);
+    spots[i].data =
+        extract_normalized_spot_data(spot.begin(), spot.end(), bg_spot.begin(),
+                                     mask_spot.begin(), spots_data);
   }
 
   h = imhist(spots_data.begin(), spots_data.end(), 256,
@@ -201,20 +206,18 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
   size_t num_pixels = max_allowable_pixels;
   for (size_t i = 0; i < spots.size(); ++i) {
     spots[i].rf = 1 - (spots[i].xc + from_front_off) / (origin - front + 1);
-    auto mask_spot = mask(slice{spots[i].rect.y1, spots[i].rect.y2},
-                          slice{spots[i].rect.x1, spots[i].rect.x2});
     size_t num_dark_pixels =
         count_dark_pixels(spots[i].data.begin(), spots[i].data.end(), thresh);
-    spots[i].darkness = num_dark_pixels;
+    println_i(num_dark_pixels);
     num_pixels =
         std::min(num_pixels, static_cast<size_t>(0.8 * num_dark_pixels));
   }
   println_i(num_pixels);
 
- 
   for (size_t i = 0; i < spots.size(); ++i) {
     sort(spots[i].data.begin(), spots[i].data.end());
-    spots[i].darkness = accumulate(spots[i].data.begin(), num_pixels);
+    spots[i].darkness =
+        accumulate(spots[i].data.begin(), num_pixels / 4, num_pixels);
   }
 
   // Sort spots in the order of descending yc

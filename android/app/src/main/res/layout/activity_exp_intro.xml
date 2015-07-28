@@ -12,12 +12,15 @@
         android:gravity="center_vertical"
         android:layout_alignParentTop="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:clickable="true"
+        android:focusableInTouchMode="true"/>
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
+        android:id="@+id/scrollView"
+        >
 
         <LinearLayout
             android:orientation="vertical"
@@ -27,7 +30,8 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:weightSum="1">
+            android:clickable="true"
+            android:focusableInTouchMode="true">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"

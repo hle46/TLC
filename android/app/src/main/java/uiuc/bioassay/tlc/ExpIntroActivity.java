@@ -31,9 +31,6 @@ public class ExpIntroActivity extends AppCompatActivity {
     private static final String TAG = "INTRO";
     private File folder;
 
-    private void hideSoftKeyboard(View v) {
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +41,10 @@ public class ExpIntroActivity extends AppCompatActivity {
                 new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (!hasFocus) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -55,8 +54,10 @@ public class ExpIntroActivity extends AppCompatActivity {
                 new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (!hasFocus) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );

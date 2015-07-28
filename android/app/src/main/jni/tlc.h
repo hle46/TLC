@@ -4,10 +4,10 @@
 #include <string>
 #include "imtoolbox.h"
 namespace tlc {
-constexpr size_t left_off = 30;
+constexpr size_t left_off = 10;
 constexpr size_t right_off = 400;
 constexpr size_t top_off = 350;
-constexpr size_t bottom_off = 400;
+constexpr size_t bottom_off = 450;
 constexpr size_t from_front_off = 100;
 constexpr size_t from_origin_off = 100;
 constexpr size_t max_allowable_pixels = 400;
