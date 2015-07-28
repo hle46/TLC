@@ -1,0 +1,15 @@
+Experiment Name: a1-100-90-80
+Description: 
+Location: 
+	Latitude:40.1113652
+	Longitude: -88.2268455
+	Time: 12:52:44 PM
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.732135
+**INFO**: 	Darkness: 6042.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.699701
+**INFO**: 	Darkness: 4726.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.699418
+**INFO**: 	Darkness: 3468.000000

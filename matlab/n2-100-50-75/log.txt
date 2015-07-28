@@ -1,0 +1,24 @@
+Experiment Name: n2-100-50-75
+Experiment Day: 
+User ID: 
+User Name: 
+Phone Number: 
+Drug Name (INN): 
+Lot Number: 
+Expiration Day: 
+Phone ID: 
+Location: 
+	Latitude:40.1153944
+	Longitude: -88.2347995
+	Time: 3:09:24 PM
+**INFO**: 18828
+**INFO**: 0.831373
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.635743
+**INFO**: 	Darkness: 4712.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.637452
+**INFO**: 	Darkness: 1600.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.631785
+**INFO**: 	Darkness: 3333.000000

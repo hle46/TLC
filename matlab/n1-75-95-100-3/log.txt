@@ -1,0 +1,15 @@
+Experiment Name: n1-75-95-100-3
+Description: 
+Location: 
+	Latitude:40.1151087
+	Longitude: -88.2266745
+	Time: 2:09:29 PM
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.605452
+**INFO**: 	Darkness: 4272.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.608382
+**INFO**: 	Darkness: 5687.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.613603
+**INFO**: 	Darkness: 6419.000000

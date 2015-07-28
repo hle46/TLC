@@ -1,0 +1,15 @@
+Experiment Name: a3-75-95-100
+Description: 
+Location: 
+	Latitude:40.1113652
+	Longitude: -88.2268455
+	Time: 1:17:10 PM
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.756700
+**INFO**: 	Darkness: 4299.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.732714
+**INFO**: 	Darkness: 4552.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.730016
+**INFO**: 	Darkness: 4860.000000
