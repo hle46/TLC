@@ -9,7 +9,7 @@ function [ mask ] = detectDotsMethod3( f )
         end
     end
     mask = f <= (i - 1)/255;
-    mask = imopen(mask, strel('disk', 15));
+    mask = imopen(mask, strel('disk', 17));
     %mask = imdilate(mask, strel('disk', 5));
     [ mask ] = filterInvalidDots( mask );
 end

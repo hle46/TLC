@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="- Make sure you are in a DARK environment, turn off the light\n\n- Turn on the UV Lamp, wait for 5 minutes\n\n- Touch lines or spots to get focus\n\n- Insert sample plate and take picture"
+        android:text="- Make sure your environment is DARK, turn off the light\n\n- Turn on the UV Lamp, wait for 30 seconds\n\n- Insert sample plate and slide to the end of the cradle\n\n- Touch lines or spots to get focus\n\n- Press CAPTURE"
         android:id="@+id/sample_steps"
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="10dp"
@@ -41,7 +41,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="- Make sure you are in a DARK environment, turn off the light\n\n- Take the sample plate out\n\n- Insert a blank plate and take picture"
+        android:text="- Make sure your environment is DARK, turn off the light\n\n- Take the sample plate out\n\n- Insert a CLEAN BLANK plate and slide to the end of the cradle\n\n- Press CAPTURE"
         android:id="@+id/bg_steps"
         android:layout_marginBottom="100dp"
         android:layout_marginLeft="10dp"

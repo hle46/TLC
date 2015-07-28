@@ -2,18 +2,22 @@ package uiuc.bioassay.tlc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,6 +25,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
 
 import uiuc.bioassay.tlc.camera.CameraActivity;
 
@@ -30,7 +35,7 @@ import static uiuc.bioassay.tlc.TLCApplication.cleanFolder;
 public class ExpIntroActivity extends AppCompatActivity {
     private static final String TAG = "INTRO";
     private File folder;
-
+    private EditText editText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +46,10 @@ public class ExpIntroActivity extends AppCompatActivity {
                 new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
+                        if (hasFocus) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.showSoftInput(expName, InputMethodManager.SHOW_IMPLICIT);
+                        } else {
                             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                             inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         }
@@ -54,10 +62,37 @@ public class ExpIntroActivity extends AppCompatActivity {
                 new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            v.callOnClick();
                         }
+                    }
+                }
+        );
+
+        expDay.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar currentDate = Calendar.getInstance();
+                        int curYear = currentDate.get(Calendar.YEAR);
+                        int curDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                        int curMonth = currentDate.get(Calendar.MONTH);
+
+
+                        DatePickerDialog datePicker;
+
+                        datePicker = new DatePickerDialog(ExpIntroActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                            public void onDateSet(DatePicker datepicker, int chosenyear, int chosenmonth, int chosenday) {
+                                chosenmonth = chosenmonth + 1;
+                                expDay.setText(chosenmonth + "/" + chosenday + "/" + chosenyear);
+                            }
+                        }, curYear, curMonth, curDay);
+
+                        datePicker.setTitle("Select Date");
+                        datePicker.show();
                     }
                 }
         );
@@ -68,7 +103,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.toggleSoftInput(0, 0);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -79,7 +118,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.toggleSoftInput(0, 0);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -90,7 +133,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.toggleSoftInput(0, 0);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -101,7 +148,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.toggleSoftInput(0, 0);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -112,7 +163,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.toggleSoftInput(0, 0);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -124,6 +179,35 @@ public class ExpIntroActivity extends AppCompatActivity {
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            v.callOnClick();
+                        }
+                    }
+                }
+        );
+
+        expireDay.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar currentDate = Calendar.getInstance();
+                        int curYear = currentDate.get(Calendar.YEAR);
+                        int curDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                        int curMonth = currentDate.get(Calendar.MONTH);
+
+
+                        DatePickerDialog datePicker;
+
+                        datePicker = new DatePickerDialog(ExpIntroActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                            public void onDateSet(DatePicker datepicker, int chosenyear, int chosenmonth, int chosenday) {
+                                chosenmonth = chosenmonth + 1;
+                                expireDay.setText(chosenmonth + "/" + chosenday + "/" + chosenyear);
+                            }
+                        }, curYear, curMonth, curDay);
+
+                        datePicker.setTitle("Select Date");
+                        datePicker.show();
                     }
                 }
         );
@@ -134,7 +218,11 @@ public class ExpIntroActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        if (hasFocus) {
+                            inputMethodManager.showSoftInput(phoneID, InputMethodManager.SHOW_IMPLICIT);
+                        } else {
+                            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                 }
         );
@@ -160,10 +248,55 @@ public class ExpIntroActivity extends AppCompatActivity {
                 }
             }
         };
+        final AlertDialog alertDialog = new AlertDialog.Builder(ExpIntroActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        editText.requestFocus();
+                    }
+                });
         expNext.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (expName.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter experiment name");
+                            alertDialog.show();
+                            editText = expName;
+                            return;
+                        } else if (expDay.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter experiment day");
+                            alertDialog.show();
+                            editText = expDay;
+                            return;
+                        } else if (userID.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter user ID");
+                            alertDialog.show();
+                            editText = userID;
+                            return;
+                        } else if (userName.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter user name");
+                            alertDialog.show();
+                            editText = userName;
+                            return;
+                        } else if (drugINN.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter drug INN");
+                            alertDialog.show();
+                            editText = drugINN;
+                            return;
+                        } else if (lotNumber.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter lot number");
+                            alertDialog.show();
+                            editText = lotNumber;
+                            return;
+                        } else if (expireDay.getText().toString().equals("")) {
+                            alertDialog.setMessage("Please enter expire day");
+                            alertDialog.show();
+                            editText = expireDay;
+                            return;
+                        }
                         folder = new File(TLCApplication.ROOT_FOLDER, expName.getText().toString());
                         if (folder.exists()) {
                             final AlertDialog.Builder builder = new AlertDialog.Builder(ExpIntroActivity.this);
@@ -214,6 +347,8 @@ public class ExpIntroActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void exportToFile(String expName, String expDay, String userID, String userName, String phoneNumber, String drugINN, String lotNumber, String expireDay, String phoneID) {
         BufferedWriter out = null;

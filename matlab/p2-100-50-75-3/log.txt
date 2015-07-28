@@ -1,0 +1,15 @@
+Experiment Name: p2-100-50-75-3
+Description: 
+Location: 
+	Latitude:40.1151087
+	Longitude: -88.2266745
+	Time: 2:43:54 PM
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.421066
+**INFO**: 	Darkness: 7202.000000
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.417690
+**INFO**: 	Darkness: 4673.000000
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.414851
+**INFO**: 	Darkness: 6781.000000

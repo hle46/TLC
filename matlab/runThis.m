@@ -3,11 +3,11 @@ close all;
 X_LEFT = 10 + 1;
 X_RIGHT = 400;
 Y_TOP = 350 + 1;
-Y_BOTTOM = 400;
-imdir = 'a1-75-95-100';
+Y_BOTTOM = 450;
+imdir = 'test11';
 
 if ~exist(fullfile(imdir, 'sample', 'avg.png'), 'file') 
-    averagePhotos(fullfile(imdir, 'sample'), 5);
+    averagePhotos(fullfile(imdir, 'sample'), 8);
 end
 I = im2double(imread(fullfile(imdir, 'sample', 'avg.png')));
 figure;
@@ -187,15 +187,50 @@ figure;
 imshow(I);
 hold on, plot([lines.origin, lines.origin], [Y_TOP, h - Y_BOTTOM], [lines.front, lines.front], [Y_TOP, h - Y_BOTTOM], 'LineWidth', 2)
 
+figure;
+num_pixels = 1000;
 for i=1:3
-    plotDot(dots_norm{i}, lines.front + X_OFFSET_FROM_FRONTLINE, Y_TOP, lines.origin, colors(i));
-     dots_norm{i}.rf
+    %plotDot(dots_norm{i}, lines.front + X_OFFSET_FROM_FRONTLINE, Y_TOP, lines.origin, colors(i));
+    temp = sort(dots_norm{i}.data(:));
+    dots_norm{i}.f = temp(1:num_pixels);
+    %sum(temp(1:400))
+    plot(1:num_pixels, temp(1:num_pixels), 'k')
+    f = fit((1:num_pixels)', temp(1:num_pixels), 'power2')
+    hold on;
+%     muhat = expfit(temp(1:400))
+%     f = (1/muhat) * exp(-(1:400)' * (1/muhat));
+%     hold on;
+    plot(f, colors(i));
+    %dots_norm{i}.rf
     dots_norm{i}.darkness
 end
 
+c = [100/100, 90/100, 80/100];
+y2 = zeros(num_pixels, 1);
+for i=1:num_pixels
+    y1 = dots_norm{1}.f(i); 
+    y3 = dots_norm{3}.f(i); 
+    k = log(y1 / y3) / (c(3) - c(1));
+    N = y1 * exp(k * c(1));
+    y2(i) = -log(dots_norm{2}.f(i)/N)/k;
+end
+%figure; plot(dots_norm{2}.f, '--');
+%hold on;
+figure;
+plot(y2);
+% figure;
+% p = polyfit(dots_norm{1}.f(10:400), dots_norm{2}.f(10:400), 1)
+% y = polyval(p, dots_norm{1}.f(10:400));
+% scatter(dots_norm{1}.f, dots_norm{2}.f);
+% hold on;
+% plot(dots_norm{1}.f(10:400), y);
+
+% [m, b] = ransacfit(dots_norm{1}.f, dots_norm{2}.f);
+
+
 % figure; plot([0.75 0.9 1], [dots_norm{3}.darkness, dots_norm{2}.darkness, dots_norm{1}.darkness]);
-% A = [0.75 -dots_norm{3}.darkness/dots_norm{1}.darkness; 1 -1]
-% b = [0.75*dots_norm{3}.darkness/dots_norm{1}.darkness; 1]
+% A = [75 -dots_norm{1}.p; 100 -dots_norm{3}.p]
+% b = [75*dots_norm{1}.p; 100*dots_norm{3}.p]
 % x = A \ b
 % v = dots_norm{2}.darkness / dots_norm{1}.darkness
-% (x(2)*v) / (x(1) - v)
+% (x(2)*dots_norm{2}.p) / (x(1) - dots_norm{2}.p)
