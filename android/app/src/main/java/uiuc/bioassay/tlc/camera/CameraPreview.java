@@ -43,6 +43,7 @@
 package uiuc.bioassay.tlc.camera;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.media.MediaActionSound;
@@ -74,7 +75,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public boolean isFocusSuccess() {
         return focusSuccess;
     }
-
+    
     public CameraPreview(Context context, Camera camera) {
         super(context);
         mCamera = camera;
@@ -179,6 +180,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                             if (success) {
                                 focusSound.play();
                                 focusSuccess = true;
+                                Toast.makeText(getContext(), "Focus successfully", Toast.LENGTH_SHORT).show();
                             } else {
                                 focusSuccess = false;
                                 Toast.makeText(getContext(), "Fail to focus, try again!", Toast.LENGTH_SHORT).show();

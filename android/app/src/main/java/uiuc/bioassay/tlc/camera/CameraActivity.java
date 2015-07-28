@@ -123,16 +123,15 @@ public class CameraActivity extends AppCompatActivity implements
                     mCamera.takePicture(null, null,
                             mPicture);
                 } else if (!isBlankPlate) {
-                    picCount = 0;
                     stopSeriesSound.play();
+                    picCount = 0;
                     buttonCapture.setEnabled(true);
                     mPreview.setFocusOnTouch(false);
                     currentFolder = rootFolder + File.separator + TLCApplication.BG_FOLDER;
                     isBlankPlate = true;
                 } else {
                     // Done
-                    picCount = 0;
-                    isBlankPlate = false;
+                    stopSeriesSound.play();
                     exportLocationToFile();
                     Intent intent = new Intent(CameraActivity.this, TLCProcActivity.class);
                     intent.putExtra(TLCApplication.FOLDER_EXTRA, rootFolder);
@@ -406,6 +405,10 @@ public class CameraActivity extends AppCompatActivity implements
 
         if (mCamera == null) {
             openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
+        }
+        if (isBlankPlate) {
+            title.setText("Blank plate screen");
+            instructions.setText("- Make sure your environment is DARK, turn off the light\\n\\n- Turn on the UV Lamp, wait for 10 seconds\\n\\n- Insert a CLEAN BLANK plate and slide to the end of the cradle\\n\\n- Press CAPTURE");
         }
     }
 
