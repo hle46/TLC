@@ -10,6 +10,17 @@
         >
     </FrameLayout>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/camera_title"
+        android:layout_height="25dp"
+        android:text="Sample Plate Screen"
+        android:background="@color/light_gray"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:textColor="@color/white"/>
+
     <Button
         android:id="@+id/button_capture"
         android:text="Capture"
@@ -30,26 +41,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="- Make sure your environment is DARK, turn off the light\n\n- Turn on the UV Lamp, wait for 30 seconds\n\n- Insert sample plate and slide to the end of the cradle\n\n- Touch lines or spots to get focus\n\n- Press CAPTURE"
-        android:id="@+id/sample_steps"
-        android:layout_marginBottom="70dp"
+        android:id="@+id/instructions"
+        android:layout_marginBottom="40dp"
         android:layout_marginLeft="10dp"
         android:layout_above="@id/button_capture"
         android:layout_gravity="center_horizontal"
         android:textSize="16sp"
         android:textColor="@color/white"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="- Make sure your environment is DARK, turn off the light\n\n- Take the sample plate out\n\n- Insert a CLEAN BLANK plate and slide to the end of the cradle\n\n- Press CAPTURE"
-        android:id="@+id/bg_steps"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="10dp"
-        android:layout_above="@id/button_capture"
-        android:layout_gravity="center_horizontal"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:visibility="invisible"
         />
 
 

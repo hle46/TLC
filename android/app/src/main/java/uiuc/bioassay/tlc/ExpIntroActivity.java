@@ -320,6 +320,7 @@ public class ExpIntroActivity extends AppCompatActivity {
                             Intent intent = new Intent(ExpIntroActivity.this, PillsActivity.class);
                             intent.putExtra(TLCApplication.FOLDER_EXTRA, folder.getAbsolutePath());
                             startActivity(intent);
+                            finish();
                         }
                     }
                 }

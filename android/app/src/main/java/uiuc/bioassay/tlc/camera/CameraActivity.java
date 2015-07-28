@@ -92,8 +92,8 @@ public class CameraActivity extends AppCompatActivity implements
     private String rootFolder;
     private String currentFolder;
     private boolean isBlankPlate = false;
-    private TextView sampleInstructions;
-    private TextView blankPlateInstructions;
+    private TextView instructions;
+    private TextView title;
 
     private int picCount = 0;
     private StartPictureSeriesSound startSeriesSound = new StartPictureSeriesSound();
@@ -123,9 +123,6 @@ public class CameraActivity extends AppCompatActivity implements
                     mCamera.takePicture(null, null,
                             mPicture);
                 } else if (!isBlankPlate) {
-                    sampleInstructions.setVisibility(View.INVISIBLE);
-                    blankPlateInstructions.setVisibility(View.VISIBLE);
-
                     picCount = 0;
                     stopSeriesSound.play();
                     buttonCapture.setEnabled(true);
@@ -134,6 +131,8 @@ public class CameraActivity extends AppCompatActivity implements
                     isBlankPlate = true;
                 } else {
                     // Done
+                    picCount = 0;
+                    isBlankPlate = false;
                     exportLocationToFile();
                     Intent intent = new Intent(CameraActivity.this, TLCProcActivity.class);
                     intent.putExtra(TLCApplication.FOLDER_EXTRA, rootFolder);
@@ -218,8 +217,8 @@ public class CameraActivity extends AppCompatActivity implements
         TouchRectView touchRectView = (TouchRectView) findViewById(R.id.touch_rect);
         mPreview.setTouchRectView(touchRectView);
 
-        sampleInstructions = (TextView) findViewById(R.id.sample_steps);
-        blankPlateInstructions = (TextView) findViewById(R.id.bg_steps);
+        instructions = (TextView) findViewById(R.id.instructions);
+        title = (TextView) findViewById(R.id.camera_title);
 
         mLastUpdateTime = "";
 

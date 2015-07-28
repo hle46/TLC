@@ -19,6 +19,11 @@ import uiuc.bioassay.tlc.TLCApplication;
 import static uiuc.bioassay.tlc.TLCApplication.processTLC;
 
 public class TLCProcActivity extends AppCompatActivity {
+    private double[] currResult;
+
+    public void setCurrResult(double[] result) {
+        currResult = result;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

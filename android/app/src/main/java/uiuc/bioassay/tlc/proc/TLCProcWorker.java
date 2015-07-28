@@ -101,6 +101,8 @@ public class TLCProcWorker extends AsyncTask<String, Void, double[]> {
             tr2.addView(textView);
         }
         tableLayout.addView(tr2);
+        TLCProcActivity tlcProcActivity = (TLCProcActivity) activity;
+        tlcProcActivity.setCurrResult(spots);
     }
 
     private static Bitmap decodeIMG(String img) {
