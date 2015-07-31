@@ -19,6 +19,8 @@ public class TLCApplication extends Application {
     public static final String AUTO_FOCUS = "AUTO_FOCUS";
     public static final String FOLDER_EXTRA = "FOLDER_EXTRA";
     public static final String ROOT_FOLDER = Environment.getExternalStorageDirectory() + "/Android/data/uiuc.bioassay.tlc";
+    public static final String NUM_CONCS = "NUM_CONCS";
+    public static final String DATA = "DATA";
 
 
     /*----------------------------------------------------------------------------*/
@@ -40,44 +42,6 @@ public class TLCApplication extends Application {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
-    /**
-     * set screen off timeout
-     * @param screenOffTimeout int 0~6
-     */
-    public static void setTimeout(Activity activity, int screenOffTimeout) {
-        int time;
-        switch (screenOffTimeout) {
-            case 0:
-                time = 15000;
-                break;
-            case 1:
-                time = 30000;
-                break;
-            case 2:
-                time = 60000;
-                break;
-            case 3:
-                time = 120000;
-                break;
-            case 4:
-                time = 600000;
-                break;
-            case 5:
-                time = 1800000;
-                break;
-            default:
-                time = -1;
-        }
-        android.provider.Settings.System.putInt(activity.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, time);
-    }
-
 
     /* Native signatures */
     public native static void cleanFolder(String folder);

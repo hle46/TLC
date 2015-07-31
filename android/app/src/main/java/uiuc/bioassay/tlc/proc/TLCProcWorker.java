@@ -97,7 +97,7 @@ public class TLCProcWorker extends AsyncTask<String, Void, double[]> {
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setWidth(90);
             textView.setTextSize(18);
-            textView.setText("D: " + round(spots[2 * j + 1], 3));
+            textView.setText("D: " + round(spots[2 * j + 1], 2));
             tr2.addView(textView);
         }
         tableLayout.addView(tr2);

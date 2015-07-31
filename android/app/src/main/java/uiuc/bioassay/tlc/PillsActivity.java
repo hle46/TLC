@@ -98,7 +98,7 @@ public class PillsActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(PillsActivity.this, CameraActivity.class);
+                        Intent intent = new Intent(PillsActivity.this, TLCSetupActivity.class);
                         intent.putExtra(TLCApplication.FOLDER_EXTRA, folder);
                         startActivity(intent);
                         finish();
@@ -106,6 +106,10 @@ public class PillsActivity extends AppCompatActivity {
                 }
         );
 
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     @Override

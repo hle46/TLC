@@ -1,24 +1,28 @@
-Experiment Name: p3-100-50-75-2
-Experiment Day: 
-User ID: 
-User Name: 
-Phone Number: 
-Drug Name (INN): 
-Lot Number: 
-Expiration Day: 
+Experiment Name: test10
+Experiment Day: 7/28/2015
+User ID: g
+User Name: gg
+Phone Number: 666
+Drug Name (INN): ggg
+Lot Number: 666
+Expiration Day: 7/28/2015
 Phone ID: 
 Location: 
-	Latitude:40.1153944
-	Longitude: -88.2347995
-	Time: 2:57:14 PM
-**INFO**: 42492
-**INFO**: 0.819608
+	Latitude:40.116103
+	Longitude: -88.2244222
+	Time: 3:53:49 PM
+**INFO**: 40860
+**INFO**: 0.866667
+**INFO**: 6761
+**INFO**: 5010
+**INFO**: 8588
+**INFO**: 400
 **INFO**: Spot 1: 
-**INFO**: 	Rf: 0.492180
-**INFO**: 	Darkness: 8997.000000
+**INFO**: 	Rf: 0.493331
+**INFO**: 	Darkness: 197.769967
 **INFO**: Spot 2: 
-**INFO**: 	Rf: 0.498095
-**INFO**: 	Darkness: 5678.000000
+**INFO**: 	Rf: 0.498431
+**INFO**: 	Darkness: 228.737979
 **INFO**: Spot 3: 
-**INFO**: 	Rf: 0.494381
-**INFO**: 	Darkness: 6830.000000
+**INFO**: 	Rf: 0.494960
+**INFO**: 	Darkness: 217.001910

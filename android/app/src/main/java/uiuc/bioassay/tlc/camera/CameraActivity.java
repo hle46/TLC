@@ -131,11 +131,9 @@ public class CameraActivity extends AppCompatActivity implements
                     isBlankPlate = true;
                 } else {
                     // Done
-                    stopSeriesSound.play();
+                    //stopSeriesSound.play();
                     exportLocationToFile();
-                    Intent intent = new Intent(CameraActivity.this, TLCProcActivity.class);
-                    intent.putExtra(TLCApplication.FOLDER_EXTRA, rootFolder);
-                    startActivity(intent);
+                    setResult(RESULT_OK);
                     finish();
                 }
             } catch (FileNotFoundException e) {
@@ -557,7 +555,7 @@ public class CameraActivity extends AppCompatActivity implements
         params.setJpegQuality(100);
 
         // Set focus mode
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
         // Set exposure offset
         params.setExposureCompensation(0);

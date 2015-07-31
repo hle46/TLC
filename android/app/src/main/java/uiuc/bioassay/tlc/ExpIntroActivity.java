@@ -262,6 +262,7 @@ public class ExpIntroActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         if (expName.getText().toString().equals("")) {
                             alertDialog.setMessage("Please enter experiment name");
                             alertDialog.show();
@@ -297,7 +298,7 @@ public class ExpIntroActivity extends AppCompatActivity {
                             alertDialog.show();
                             editText = expireDay;
                             return;
-                        }
+                        } */
                         folder = new File(TLCApplication.ROOT_FOLDER, expName.getText().toString());
                         if (folder.exists()) {
                             final AlertDialog.Builder builder = new AlertDialog.Builder(ExpIntroActivity.this);
@@ -328,6 +329,9 @@ public class ExpIntroActivity extends AppCompatActivity {
         );
     }
 
+    @Override
+    public void onBackPressed() {
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

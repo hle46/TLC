@@ -4,7 +4,7 @@ X_LEFT = 10 + 1;
 X_RIGHT = 400;
 Y_TOP = 350 + 1;
 Y_BOTTOM = 450;
-imdir = 'test11';
+imdir = 'a2-75-95-100';
 
 if ~exist(fullfile(imdir, 'sample', 'avg.png'), 'file') 
     averagePhotos(fullfile(imdir, 'sample'), 8);
@@ -194,18 +194,17 @@ for i=1:3
     temp = sort(dots_norm{i}.data(:));
     dots_norm{i}.f = temp(1:num_pixels);
     %sum(temp(1:400))
-    plot(1:num_pixels, temp(1:num_pixels), 'k')
-    f = fit((1:num_pixels)', temp(1:num_pixels), 'power2')
+    plot(1:num_pixels, temp(1:num_pixels), colors(i))
     hold on;
-%     muhat = expfit(temp(1:400))
-%     f = (1/muhat) * exp(-(1:400)' * (1/muhat));
+%     f = fit((1:num_pixels)', temp(1:num_pixels), 'power2')
 %     hold on;
-    plot(f, colors(i));
-    %dots_norm{i}.rf
+%     plot(f, colors(i));
     dots_norm{i}.darkness
 end
+legend('75', '95', '100');
+title('A2')
 
-c = [100/100, 90/100, 80/100];
+c = [100/100, 50/100, 75/100];
 y2 = zeros(num_pixels, 1);
 for i=1:num_pixels
     y1 = dots_norm{1}.f(i); 

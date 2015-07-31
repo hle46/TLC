@@ -1,0 +1,28 @@
+Experiment Name: p3
+Experiment Day: 7/28/2015
+User ID: huyle2
+User Name: Huy Le
+Phone Number: 2177217623
+Drug Name (INN): paracetamol
+Lot Number: 000
+Expiration Day: 7/28/2015
+Phone ID: 1234567890
+Location: 
+	Latitude:40.116103
+	Longitude: -88.2244222
+	Time: 2:51:21 PM
+**INFO**: 26679
+**INFO**: 0.870588
+**INFO**: 5622
+**INFO**: 2701
+**INFO**: 5073
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.492206
+**INFO**: 	Darkness: 223.107030
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.497277
+**INFO**: 	Darkness: 243.315964
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.494096
+**INFO**: 	Darkness: 220.933432

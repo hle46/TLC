@@ -1,5 +1,7 @@
 package uiuc.bioassay.tlc.proc;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,15 +35,17 @@ public class TLCProcActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.putExtra(TLCApplication.DATA, currResult);
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 }
         );
         TLCProcWorker tlcProcWorker = new TLCProcWorker(this);
-        //double[] spots = processTLC(getIntent().getStringExtra(TLCApplication.FOLDER_EXTRA) + "/");
         tlcProcWorker.execute(getIntent().getStringExtra(TLCApplication.FOLDER_EXTRA));
-        //Log.d("xxx", getIntent().getStringExtra(TLCApplication.FOLDER_EXTRA));
-        //tlcProcWorker.execute("/storage/sdcard0/Android/data/uiuc.bioassay.tlc/n2-4");
+
+        //tlcProcWorker.execute("/storage/sdcard0/Android/data/uiuc.bioassay.tlc/test/1");
     }
 
     @Override

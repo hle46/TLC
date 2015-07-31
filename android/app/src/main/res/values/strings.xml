@@ -4,11 +4,23 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_exp_intro">Experiment Introduction</string>
-    <string name="title_activity_tlcproc">TLCProcActivity</string>
-    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_exp_intro">New Experiment Screen</string>
+    <string name="title_activity_tlcproc">TLC Processing Screen</string>
+    <string name="title_activity_welcome">Start screen</string>
     <string name="title_activity_camera">CameraActivity</string>
-    <string name="title_activity_pills">PillsActivity</string>
+    <string name="title_activity_pills">Pills Image Screen</string>
+    <string name="title_activity_tlcsetup">TLCSetupActivity</string>
+    <string name="title_activity_tlcresult">TLCResultActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="concs_prompt">Choose a number</string>
+    <string-array name="num_concs_array">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="concs_type">
+        <item>std</item>
+        <item>unknown</item>
+    </string-array>
 </resources>

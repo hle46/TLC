@@ -1,250 +1,253 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="uiuc.bioassay.tlc.ExpIntroActivity">
+
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="25dp"
-        android:text="Experiment Screen"
-        android:background="@color/light_gray"
+        android:layout_height="@dimen/title_height"
+        android:background="@color/title_color"
         android:gravity="center_vertical"
-        android:layout_alignParentTop="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:textColor="@color/white"/>
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="@string/title_activity_exp_intro"
+        android:textColor="@color/white" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
-        >
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:clickable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:src="@drawable/uiuc_logo"
+                android:layout_height="@dimen/logo_height"
+                android:contentDescription="@string/logo"
                 android:scaleType="centerInside"
-                android:contentDescription="@string/logo" />
-            <TextView android:text="New TLC Experiment" android:layout_width="wrap_content"
+                android:src="@drawable/uiuc_logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textSize="20sp"/>
+                android:text="New TLC Experiment"
+                android:textSize="20sp" />
 
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                >
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_gravity="center_horizontal">
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Exp Name:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:text="test"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/exp_name"
-                    android:selectAllOnFocus="true"
-                    />
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Exp Name:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/exp_name"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true"
+                        android:text="test" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Exp Day:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:focusableInTouchMode="true"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/exp_day"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Exp Day:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/exp_day"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:focusableInTouchMode="true"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="User ID:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/user_ID"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User ID:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/user_ID"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="User Name:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/user_name"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User Name:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/user_name"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Phone #:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/phone_number"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone #:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/phone_number"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="phone"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Drug INN:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/drug_inn"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Drug INN:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/drug_inn"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Lot #:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text|number"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/lot_number"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lot #:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/lot_number"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text|number"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Expire Day:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/expire_day"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expire Day:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableRow
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/expire_day"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Phone ID:" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text|number"
-                    android:ems="10"
-                    android:maxLength="32"
-                    android:id="@+id/phone_id"
-                    android:selectAllOnFocus="true"/>
-            </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone ID:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/phone_id"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="text|number"
+                        android:maxLength="32"
+                        android:selectAllOnFocus="true" />
+                </TableRow>
             </TableLayout>
 
             <Button
                 android:id="@+id/exp_next"
-                android:text="Next"
                 android:layout_width="110dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"/>
+                android:text="Next" />
         </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

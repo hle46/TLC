@@ -61,6 +61,14 @@
             android:name=".PillsActivity"
             android:label="@string/title_activity_pills" >
         </activity>
+        <activity
+            android:name=".TLCSetupActivity"
+            android:label="@string/title_activity_tlcsetup" >
+        </activity>
+        <activity
+            android:name=".TLCResultActivity"
+            android:label="@string/title_activity_tlcresult" >
+        </activity>
     </application>
 
 </manifest>
