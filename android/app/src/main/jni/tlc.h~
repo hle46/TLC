@@ -4,7 +4,7 @@
 #include <string>
 #include "imtoolbox.h"
 namespace tlc {
-constexpr size_t left_off = 20;
+constexpr size_t left_off = 10;
 constexpr size_t right_off = 400;
 constexpr size_t top_off = 350;
 constexpr size_t bottom_off = 450;

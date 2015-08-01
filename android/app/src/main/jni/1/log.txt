@@ -1,0 +1,109 @@
+Location: 
+	Latitude:40.1151012
+	Longitude: -88.2351695
+	Time: 5:22:54 PM
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766
+**INFO**: 24946
+**INFO**: 0.843137
+**INFO**: 2760
+**INFO**: 3792
+**INFO**: 5712
+**INFO**: 400
+**INFO**: Spot 1: 
+**INFO**: 	Rf: 0.731283
+**INFO**: 	Darkness: 211.326410
+**INFO**: Spot 2: 
+**INFO**: 	Rf: 0.729078
+**INFO**: 	Darkness: 226.566025
+**INFO**: Spot 3: 
+**INFO**: 	Rf: 0.733257
+**INFO**: 	Darkness: 231.131766

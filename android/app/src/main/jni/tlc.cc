@@ -5,7 +5,7 @@
 namespace tlc {
 using namespace imtoolbox;
 template <typename T>
-decltype(auto) detect_lines(const matrix2<T> &m) noexcept {
+std::pair<size_t, size_t> detect_lines(const matrix2<T> &m) noexcept {
   auto sigma = static_cast<T>(4);
   auto h_size = static_cast<int>(6 * sigma + 1);
 
@@ -18,12 +18,27 @@ decltype(auto) detect_lines(const matrix2<T> &m) noexcept {
   auto dx = sum<T>(dX, 0);
 
   auto pks = findpeaks(dx, sort_t::descend, 0.05 * 255);
-  assert(pks.size() >= 2);
+  if (pks.size() < 2) {
+    return std::make_pair(-1, -1);
+  }
+
+  constexpr fp_t thr = 500;
+  size_t idx2 = 1;
+  for (size_t idx2 = 1; idx2 < pks.size(); ++idx2) {
+    if (std::abs(static_cast<fp_t>(pks[idx2].second) -
+                 static_cast<fp_t>(pks[0].second)) < thr) {
+      continue;
+    }
+  }
+
+  if (idx2 == pks.size()) {
+    return std::make_pair(-1, -1);
+  }
 
   // Plus 1 for second derivative
   size_t offset = 3 * sigma + 1;
   std::pair<size_t, size_t> lines{pks[0].second + offset,
-                                  pks[1].second + offset};
+                                  pks[idx2].second + offset};
   if (lines.first > lines.second) {
     std::swap(lines.first, lines.second);
   }
