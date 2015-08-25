@@ -1,10 +1,10 @@
 clear;
 close all;
-X_LEFT = 10 + 1;
+X_LEFT = 20 + 1;
 X_RIGHT = 400;
 Y_TOP = 350 + 1;
 Y_BOTTOM = 450;
-imdir = 'a2-75-95-100';
+imdir = 'a3/1';
 
 if ~exist(fullfile(imdir, 'sample', 'avg.png'), 'file') 
     averagePhotos(fullfile(imdir, 'sample'), 8);

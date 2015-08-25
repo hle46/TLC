@@ -42,8 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:layout_marginTop="10dp"
-            android:text="Press NEXT to continue\n\nTo save data on cloud,\nenable Dropbox Sync"
+            android:text="Press NEXT to start a new\nexperiment.\n\nTo save data on cloud,\nenable Dropbox Sync"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button

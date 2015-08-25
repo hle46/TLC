@@ -80,6 +80,8 @@ import uiuc.bioassay.tlc.R;
 import uiuc.bioassay.tlc.TLCApplication;
 import uiuc.bioassay.tlc.proc.TLCProcActivity;
 
+import static uiuc.bioassay.tlc.TLCApplication.cleanFolder;
+
 @SuppressWarnings("deprecation")
 public class CameraActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -91,6 +93,8 @@ public class CameraActivity extends AppCompatActivity implements
     private Button buttonCapture;
     private String rootFolder;
     private String currentFolder;
+    private String logFolder;
+    private int currentIdx;
     private boolean isBlankPlate = false;
     private TextView instructions;
     private TextView title;
@@ -123,15 +127,20 @@ public class CameraActivity extends AppCompatActivity implements
                     mCamera.takePicture(null, null,
                             mPicture);
                 } else if (!isBlankPlate) {
+                    // Next taking a series of blank plate images
                     stopSeriesSound.play();
+
                     picCount = 0;
-                    buttonCapture.setEnabled(true);
-                    mPreview.setFocusOnTouch(false);
-                    currentFolder = rootFolder + File.separator + TLCApplication.BG_FOLDER;
                     isBlankPlate = true;
+                    currentFolder = rootFolder + File.separator + TLCApplication.BG_FOLDER;
+
+                    title.setText("Blank plate screen");
+                    instructions.setText("- Make sure your environment is DARK, turn off the light\n\n- Turn on the UV Lamp, wait for 15 seconds\n\n- Insert a CLEAN BLANK plate and slide to the end of the cradle\n\n- Press CAPTURE");
+                    mPreview.setFocusOnTouch(false);
+
+                    buttonCapture.setEnabled(true);
                 } else {
                     // Done
-                    //stopSeriesSound.play();
                     exportLocationToFile();
                     setResult(RESULT_OK);
                     finish();
@@ -189,7 +198,10 @@ public class CameraActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        rootFolder = getIntent().getStringExtra(TLCApplication.FOLDER_EXTRA);
+        Intent intent = getIntent();
+        logFolder = intent.getStringExtra(TLCApplication.PARENT_FOLDER_EXTRA);
+        rootFolder = intent.getStringExtra(TLCApplication.FOLDER_EXTRA);
+        currentIdx = intent.getIntExtra(TLCApplication.CURRENT_IDX, 1);
         currentFolder = rootFolder + File.separator + TLCApplication.SAMPLE_FOLDER;
         // Open tlc
         openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
@@ -215,6 +227,19 @@ public class CameraActivity extends AppCompatActivity implements
         mPreview.setTouchRectView(touchRectView);
 
         instructions = (TextView) findViewById(R.id.instructions);
+        Button buttonHelp = (Button) findViewById(R.id.button_help);
+                    buttonHelp.setOnClickListener(
+                            new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (instructions.getVisibility() == View.VISIBLE) {
+                                instructions.setVisibility(View.INVISIBLE);
+                            } else {
+                                instructions.setVisibility(View.VISIBLE);
+                            }
+                        }
+                }
+        );
         title = (TextView) findViewById(R.id.camera_title);
 
         mLastUpdateTime = "";
@@ -404,10 +429,6 @@ public class CameraActivity extends AppCompatActivity implements
         if (mCamera == null) {
             openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
         }
-        if (isBlankPlate) {
-            title.setText("Blank plate screen");
-            instructions.setText("- Make sure your environment is DARK, turn off the light\\n\\n- Turn on the UV Lamp, wait for 10 seconds\\n\\n- Insert a CLEAN BLANK plate and slide to the end of the cradle\\n\\n- Press CAPTURE");
-        }
     }
 
     @Override
@@ -448,6 +469,10 @@ public class CameraActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, rootFolder);
+        cleanFolder(rootFolder);
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     private void releaseCamera(){
@@ -555,10 +580,10 @@ public class CameraActivity extends AppCompatActivity implements
         params.setJpegQuality(100);
 
         // Set focus mode
-        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
 
         // Set exposure offset
-        params.setExposureCompensation(0);
+        params.setExposureCompensation(2);
 
         // Set white balance
         params.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_DAYLIGHT);
@@ -640,16 +665,17 @@ public class CameraActivity extends AppCompatActivity implements
     }
 
     private void exportLocationToFile() {
-        //Toast.makeText(this, "Location updated. Latitude: " + mCurrentLocation.getLatitude() + ", longitude: " + mCurrentLocation.getLongitude() + ", time: " + mLastUpdateTime,
-        //        Toast.LENGTH_LONG).show();
+        if (currentIdx > 1) {
+            return;
+        }
         BufferedWriter out = null;
         try {
-            FileWriter fstream = new FileWriter(rootFolder + File.separator + TLCApplication.LOG_FILE, true); //true tells to append data.
+            FileWriter fstream = new FileWriter(logFolder + File.separator + TLCApplication.LOG_FILE, true); //true tells to append data.
             out = new BufferedWriter(fstream);
             if (mCurrentLocation == null) {
-                out.write("Location: unknown");
+                out.write("Location: unknown\r\n");
             } else {
-                out.write("Location: \n\tLatitude:" + mCurrentLocation.getLatitude() + "\n\tLongitude: " + mCurrentLocation.getLongitude() + "\n\tTime: " + mLastUpdateTime + "\n");
+                out.write("Location: \r\n\tLatitude:" + mCurrentLocation.getLatitude() + "\r\n\tLongitude: " + mCurrentLocation.getLongitude() + "\r\n\tTime: " + mLastUpdateTime + "\r\n");
             }
             out.flush();
         }

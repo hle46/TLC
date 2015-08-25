@@ -3,6 +3,14 @@
     android:layout_height="match_parent"
     tools:context="uiuc.bioassay.tlc.proc.TLCProcActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_height"
@@ -12,15 +20,8 @@
         android:layout_alignParentTop="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textColor="@color/white"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView"
-        android:scaleType="centerInside"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:textColor="@color/white"
+        />
 
 
     <TableLayout
@@ -41,6 +42,15 @@
         android:text="Done"
         android:id="@+id/done"
         android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/text_result"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

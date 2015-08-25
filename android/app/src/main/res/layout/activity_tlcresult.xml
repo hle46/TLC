@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="uiuc.bioassay.tlc.TLCResultActivity">
+    tools:context="uiuc.bioassay.tlc.TLCResultActivity"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
 
     <TextView
         android:layout_width="fill_parent"

@@ -181,8 +181,6 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
   std::vector<Rect> rects;
   auto labels = bwlabel(mask, rects);
 
-  println_i(sum_all(mask));
-
   for (size_t i = 0; i < rects.size(); ++i) {
     if (is_invalid_spot(rects[i], f.size(1), f.size(0))) {
       continue;
@@ -216,18 +214,15 @@ std::vector<Spot<fp_t>> process(const std::string &path) noexcept {
              [](auto x) { return std::min(255 * x, static_cast<fp_t>(255)); });
 
   thresh = pctl_hist_thresh(h, 0.5) / 255;
-  println_i(thresh);
 
   size_t num_pixels = max_allowable_pixels;
   for (size_t i = 0; i < spots.size(); ++i) {
     spots[i].rf = 1 - (spots[i].xc + from_front_off) / (origin - front + 1);
     size_t num_dark_pixels =
         count_dark_pixels(spots[i].data.begin(), spots[i].data.end(), thresh);
-    println_i(num_dark_pixels);
     num_pixels =
         std::min(num_pixels, static_cast<size_t>(0.8 * num_dark_pixels));
   }
-  println_i(num_pixels);
 
   for (size_t i = 0; i < spots.size(); ++i) {
     sort(spots[i].data.begin(), spots[i].data.end());

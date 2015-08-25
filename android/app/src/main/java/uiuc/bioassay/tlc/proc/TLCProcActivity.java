@@ -21,11 +21,13 @@ import uiuc.bioassay.tlc.TLCApplication;
 import static uiuc.bioassay.tlc.TLCApplication.processTLC;
 
 public class TLCProcActivity extends AppCompatActivity {
-    private double[] currResult;
+    private double[] currResult = null;
+    private int numConcs;
 
     public void setCurrResult(double[] result) {
         currResult = result;
     }
+    public int getNumConcs() { return numConcs; }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,15 +37,24 @@ public class TLCProcActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra(TLCApplication.DATA, currResult);
-                        setResult(RESULT_OK, intent);
+                        if (currResult == null) {
+                            setResult(RESULT_CANCELED);
+                        } else {
+                            Intent intent = new Intent();
+                            intent.putExtra(TLCApplication.DATA, currResult);
+                            setResult(RESULT_OK, intent);
+                        }
                         finish();
                     }
                 }
         );
         TLCProcWorker tlcProcWorker = new TLCProcWorker(this);
-        tlcProcWorker.execute(getIntent().getStringExtra(TLCApplication.FOLDER_EXTRA));
+        Intent intent = getIntent();
+        numConcs = intent.getIntExtra(TLCApplication.NUM_CONCS, -1);
+        if (numConcs == -1) {
+            setResult(RESULT_CANCELED);
+        }
+        tlcProcWorker.execute(intent.getStringExtra(TLCApplication.FOLDER_EXTRA));
 
         //tlcProcWorker.execute("/storage/sdcard0/Android/data/uiuc.bioassay.tlc/test/1");
     }

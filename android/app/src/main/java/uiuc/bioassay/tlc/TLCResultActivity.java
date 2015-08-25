@@ -1,16 +1,22 @@
 package uiuc.bioassay.tlc;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,18 +28,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import uiuc.bioassay.tlc.camera.CameraActivity;
 import uiuc.bioassay.tlc.proc.TLCProcActivity;
+import uiuc.bioassay.tlc.services.NetworkService;
 
 import static uiuc.bioassay.tlc.TLCApplication.round;
 
 
 public class TLCResultActivity extends AppCompatActivity {
 
+    private static final String TAG = "TLC RESULT";
     private static final int COLUMN_WIDTH = 96;
     private static final int RF_COLUMN_WIDTH = 36;
     private static final int D_COLUMN_WIDTH = COLUMN_WIDTH - RF_COLUMN_WIDTH;
@@ -46,9 +57,10 @@ public class TLCResultActivity extends AppCompatActivity {
     private int currentIdx = 1;
     private String rootFolder;
     private String currFolder;
-    double[] Rf;
-    double[] D;
+    private double[] Rf;
+    private double[] D;
 
+    private EditText currEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +82,17 @@ public class TLCResultActivity extends AppCompatActivity {
             editText.setFilters(filterArray);
             editText.setMinimumWidth(COLUMN_WIDTH);
             editText.setInputType(2);
+            editText.setOnFocusChangeListener(
+                    new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            }
+                        }
+                    }
+            );
             headerRow.addView(editText);
         }
         tableLayout.addView(headerRow);
@@ -148,10 +171,25 @@ public class TLCResultActivity extends AppCompatActivity {
                         currFolder = rootFolder + File.separator + currentIdx;
                         Intent intent = new Intent(TLCResultActivity.this, CameraActivity.class);
                         intent.putExtra(TLCApplication.FOLDER_EXTRA, currFolder);
+                        intent.putExtra(TLCApplication.PARENT_FOLDER_EXTRA, rootFolder);
+                        intent.putExtra(TLCApplication.CURRENT_IDX, currentIdx);
                         startActivityForResult(intent, GET_DATA_REQUEST);
                     }
                 }
         );
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(TLCResultActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (currEditText != null) {
+                            currEditText.requestFocus();
+                            currEditText = null;
+                        }
+                    }
+                });
 
         Button calcButton = (Button) findViewById(R.id.calculate);
         calcButton.setOnClickListener(
@@ -165,37 +203,48 @@ public class TLCResultActivity extends AppCompatActivity {
                         List<Double> ys = new ArrayList<>();
                         List<Double> yUnknown = new ArrayList<>();
                         TableRow concTypeRow = (TableRow) tableLayout.getChildAt(1);
-                        LinearLayout avgLinearLayout = (LinearLayout) findViewById(R.id.avg_linear_layout);
-
                         for (int i = 0; i < numConcs; ++i) {
                             Spinner spinner = (Spinner) concTypeRow.getChildAt(i);
                             if (spinner.getSelectedItem().toString().equals("std")) {
                                 stdConcs.add(i);
-                                TableRow tr = (TableRow) tableLayout.getChildAt(0);
-                                EditText editText = (EditText) tr.getChildAt(i);
-                                String conc = editText.getText().toString();
-                                if (conc.equals("")) {
-                                    Toast.makeText(TLCResultActivity.this, "Empty standard concentration", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                xs.add(Double.parseDouble(conc));
-                                LinearLayout linearLayout = (LinearLayout) avgLinearLayout.getChildAt(i);
-                                TextView textView = (TextView) linearLayout.getChildAt(1);
-                                ys.add(Double.parseDouble(textView.getText().toString()));
                             } else {
                                 unknownConcs.add(i);
-                                LinearLayout linearLayout = (LinearLayout) avgLinearLayout.getChildAt(i);
-                                TextView textView = (TextView) linearLayout.getChildAt(1);
-                                yUnknown.add(Double.parseDouble(textView.getText().toString()));
                             }
                         }
-                        if (stdConcs.size() < 2) {
-                            Toast.makeText(TLCResultActivity.this, "Number of standards is less than 2", Toast.LENGTH_SHORT).show();
+
+                        if (unknownConcs.size() == 0) {
+                            alertDialog.setMessage("Select at least 1 unknown");
+                            alertDialog.show();
                             return;
                         }
-                        if (unknownConcs.size() == 0) {
-                            Toast.makeText(TLCResultActivity.this, "No unknown to predict", Toast.LENGTH_SHORT).show();
+
+                        if (stdConcs.size() < 2) {
+                            alertDialog.setMessage("Number of standards is less than 2");
+                            alertDialog.show();
                             return;
+                        }
+
+                        LinearLayout avgLinearLayout = (LinearLayout) findViewById(R.id.avg_linear_layout);
+                        for (int i = 0; i < stdConcs.size(); ++i) {
+                            TableRow tr = (TableRow) tableLayout.getChildAt(0);
+                            EditText editText = (EditText) tr.getChildAt(stdConcs.get(i));
+                            String conc = editText.getText().toString();
+                            if (conc.equals("")) {
+                                alertDialog.setMessage("Empty standard concentration");
+                                alertDialog.show();
+                                currEditText = editText;
+                                return;
+                            }
+                            xs.add(Double.parseDouble(conc));
+                            LinearLayout linearLayout = (LinearLayout) avgLinearLayout.getChildAt(stdConcs.get(i));
+                            TextView textView = (TextView) linearLayout.getChildAt(1);
+                            ys.add(Double.parseDouble(textView.getText().toString()));
+                        }
+
+                        for (int i = 0; i < unknownConcs.size(); ++i) {
+                            LinearLayout linearLayout = (LinearLayout) avgLinearLayout.getChildAt(unknownConcs.get(i));
+                            TextView textView = (TextView) linearLayout.getChildAt(1);
+                            yUnknown.add(Double.parseDouble(textView.getText().toString()));
                         }
 
                         double a1 = 0;
@@ -219,8 +268,43 @@ public class TLCResultActivity extends AppCompatActivity {
                             TableRow tr = (TableRow) tableLayout.getChildAt(0);
                             EditText editText = (EditText) tr.getChildAt(unknownConcs.get(i));
                             Log.d("xxx", yUnknown.get(i) + "");
-                            editText.setText(Double.toString(round((yUnknown.get(i) - b)/a, 2)));
+                            editText.setText(Double.toString(round((yUnknown.get(i) - b) / a, 2)));
                         }
+                    }
+                }
+        );
+        Button done = (Button) findViewById(R.id.done);
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        exportFinalResultToFile();
+                        NetworkService.startActionUpload(TLCResultActivity.this, rootFolder + File.separator + TLCApplication.LOG_FILE);
+                        finish();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+        done.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(TLCResultActivity.this);
+                        builder.setTitle(Html.fromHtml("<font color='#FFF12C'>Warning</font>")).setIcon(R.drawable.alert)
+                                .setMessage("Are you sure you are done with the experiment?")
+                                .setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener);
+                        AlertDialog warningDialog = builder.show();
+                        // Set title divider color
+                        int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
+                        View titleDivider = warningDialog.findViewById(titleDividerId);
+                        if (titleDivider != null)
+                            titleDivider.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
                     }
                 }
         );
@@ -234,15 +318,19 @@ public class TLCResultActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Intent intent = new Intent(TLCResultActivity.this, TLCProcActivity.class);
                 intent.putExtra(TLCApplication.FOLDER_EXTRA, currFolder);
+                intent.putExtra(TLCApplication.NUM_CONCS, numConcs);
                 startActivityForResult(intent, PROCESS_DATA_REQUEST);
+            } else {
+                Toast.makeText(this, "Fail to get data!", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == PROCESS_DATA_REQUEST) {
             if (resultCode == RESULT_OK) {
                 double[] res = data.getDoubleArrayExtra(TLCApplication.DATA);
+                exportResultToFile(res);
                 setData(res);
                 for (int i = 0; i < numConcs; ++i) {
-                    Rf[i] += res[2*i];
-                    D[i] += res[2*i + 1];
+                    Rf[i] += res[2 * i];
+                    D[i] += res[2 * i + 1];
                 }
                 LinearLayout avgLinearLayout = (LinearLayout) findViewById(R.id.avg_linear_layout);
                 for (int i = 0; i < numConcs; ++i) {
@@ -254,6 +342,87 @@ public class TLCResultActivity extends AppCompatActivity {
                     textViewD.setText(Double.toString(round(D[i] / currentIdx, 2)));
                 }
                 ++currentIdx;
+            } else {
+                Toast.makeText(this, "Fail to process data!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void exportResultToFile(double[] res) {
+        BufferedWriter out = null;
+        try {
+            FileWriter fstream = new FileWriter(rootFolder + File.separator + TLCApplication.LOG_FILE, true); //true tells to append data.
+            out = new BufferedWriter(fstream);
+            out.write("Trial " + currentIdx + ":\r\n");
+            for (int i = 0; i < numConcs; ++i) {
+                out.write("\tSpot " + i + ":\r\n");
+                out.write("\t\tRf: " + res[2*i] + "\r\n");
+                out.write("\t\tD: " + res[2*i + 1] + "\r\n");
+            }
+            out.flush();
+        }
+        catch (IOException e)
+        {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
+        finally
+        {
+            if(out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void exportFinalResultToFile() {
+        BufferedWriter out = null;
+        try {
+            FileWriter fstream = new FileWriter(rootFolder + File.separator + TLCApplication.LOG_FILE, true); //true tells to append data.
+            out = new BufferedWriter(fstream);
+            out.write("Final Result:\r\n");
+            TableRow concType = (TableRow) tableLayout.getChildAt(1);
+            for (int i = 0; i < numConcs; ++i) {
+                Spinner spinner = (Spinner) concType.getChildAt(i);
+                out.write("\t" + spinner.getSelectedItem().toString());
+                out.write("\t");
+            }
+            out.write("\r\n");
+
+            TableRow header = (TableRow) tableLayout.getChildAt(0);
+            for (int i = 0; i < numConcs; ++i) {
+                EditText editText = (EditText) header.getChildAt(i);
+                out.write("\t" + editText.getText().toString());
+                out.write("\t");
+            }
+            out.write("\r\n");
+            out.flush();
+            for (int i = 0; i < numConcs; ++i) {
+                out.write("\tRf\tD");
+            }
+            out.write("\r\n");
+
+            LinearLayout avgLinearLayout = (LinearLayout) findViewById(R.id.avg_linear_layout);
+            for (int i = 0; i < numConcs; ++i) {
+                out.write("\t" + round(Rf[i]/(currentIdx - 1), 3));
+                out.write("\t" + round(D[i]/(currentIdx - 1), 3));
+            }
+            out.write("\r\n");
+        }
+        catch (IOException e)
+        {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
+        finally
+        {
+            if(out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -270,18 +439,19 @@ public class TLCResultActivity extends AppCompatActivity {
             TextView textView1 = new TextView(this);
             textView1.setGravity(17);
             textView1.setMinimumWidth(RF_COLUMN_WIDTH);
-            textView1.setText(Double.toString(round(data[2*i], 2)));
+            textView1.setText(Double.toString(round(data[2 * i], 2)));
             linearLayout.addView(textView1);
 
             TextView textView2 = new TextView(this);
             textView2.setGravity(17);
             textView2.setMinimumWidth(D_COLUMN_WIDTH);
-            textView2.setText(Double.toString(round(data[2*i + 1], 2)));
+            textView2.setText(Double.toString(round(data[2 * i + 1], 2)));
             linearLayout.addView(textView2);
             dataRow.addView(linearLayout);
         }
         tableLayout.addView(dataRow);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
