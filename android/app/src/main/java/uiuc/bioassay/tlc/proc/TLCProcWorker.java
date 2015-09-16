@@ -57,7 +57,6 @@ public class TLCProcWorker extends AsyncTask<String, Void, double[]> {
     @Override
     protected void onPostExecute(final double[] spots) {
         progressDialog.dismiss();
-        //NetworkService.startActionUpload(mContext, folder + File.separator + "sample" + File.separator + "avg1.png");
         for (int i = 0; i < TLCApplication.MAX_PICTURE; ++i) {
             NetworkService.startActionUpload(mContext, folder + File.separator + SAMPLE_FOLDER + AVG_FILE_NAME);
             NetworkService.startActionUpload(mContext, folder + File.separator + LOG_FILE);

@@ -4,14 +4,15 @@ X_LEFT = 20 + 1;
 X_RIGHT = 400;
 Y_TOP = 350 + 1;
 Y_BOTTOM = 450;
-imdir = 'a3/1';
+imdir = 'a2-75-95-100/3';
 
 if ~exist(fullfile(imdir, 'sample', 'avg.png'), 'file') 
     averagePhotos(fullfile(imdir, 'sample'), 8);
 end
 I = im2double(imread(fullfile(imdir, 'sample', 'avg.png')));
 figure;
-imshow(I);
+imagesc(imrotate(I, -90));
+truesize
 [h, w, ~] = size(I);
 
 % G = I(:, :, 2);
@@ -19,6 +20,11 @@ imshow(I);
 G = rgb2ycbcr(I);
 G = G(:, :, 1);
 G_ROI = G(Y_TOP:(h - Y_BOTTOM), X_LEFT:(w - X_RIGHT));
+figure;
+imagesc(imrotate(G_ROI * 255, -90));
+truesize
+colorbar
+
 [ lines ] = detectLines( G_ROI );
 figure, hold off, imagesc(imrotate(G_ROI * 255, -90));
 truesize
@@ -188,7 +194,7 @@ imshow(I);
 hold on, plot([lines.origin, lines.origin], [Y_TOP, h - Y_BOTTOM], [lines.front, lines.front], [Y_TOP, h - Y_BOTTOM], 'LineWidth', 2)
 
 figure;
-num_pixels = 1000;
+num_pixels = 400;
 for i=1:3
     %plotDot(dots_norm{i}, lines.front + X_OFFSET_FROM_FRONTLINE, Y_TOP, lines.origin, colors(i));
     temp = sort(dots_norm{i}.data(:));
@@ -202,7 +208,9 @@ for i=1:3
     dots_norm{i}.darkness
 end
 legend('75', '95', '100');
-title('A2')
+xlabel('Index')
+ylabel('Relative Brightness')
+
 
 c = [100/100, 50/100, 75/100];
 y2 = zeros(num_pixels, 1);
